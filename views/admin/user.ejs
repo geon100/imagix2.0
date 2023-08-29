@@ -1,0 +1,59 @@
+<%-include('header')-%>
+
+<%-include('nav')-%>
+
+<section class="content-main">
+  <div class="content-header">
+      <h2 class="content-title">Users list</h2>
+  </div>
+  <div class="card mb-4">
+      <header class="card-header">
+          <div class="row gx-3">
+
+              
+          </div>
+      </header> <!-- card-header end// -->
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-hover">
+              <thead>
+                  <tr>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Mobile</th>
+                      <th>Status</th>
+                  </tr>
+              </thead>
+              <tbody>
+                <% users.forEach(function(user, index) { %>
+                  <tr>
+                    <td>   
+                      <div class="info pl-3">
+                        <h6 class="mb-0 title"><%= user.firstname+' '+user.lastname %></h6>
+                      </div>
+                    </td>
+                    <td><%= user.email %></td>
+                    <td><span><%= user.mobile %></span></td>
+                    <td>
+                      <form action="/admin/users/<%= user._id %>" method="post">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input opacity-10  border border-success pl-3" type="checkbox" onchange="this.form.submit();" name="isActive" role="switch" id="flexSwitchCheck" <% if (user.isActive) { %>checked<% } %>>
+                        </div>
+                      </form>
+                    </td>
+                  </tr>
+                <% }); %>
+              </tbody>
+              
+          </table> <!-- table-responsive.// -->
+      </div>
+      <br>
+      </div> <!-- card-body end// -->
+  </div> <!-- card end// -->
+
+</section> <!-- content-main end// -->
+
+
+
+
+<%-include('footer')-%>

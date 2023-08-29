@@ -1,0 +1,96 @@
+<%-include('header')-%>
+
+<%-include('nav')-%>
+<section class="content-main">
+    
+  <div class="content-header">
+      <div>
+       
+          <h2 class="content-title card-title">Products List<% if (search) { %>-Search results<% } %></h2>
+      </div>
+      <div>
+        <% if (search) { %>
+            <a href="/admin/products" class="btn btn-primary btn-sm rounded">Back to products</a>
+        <% } else { %>
+            <a href="/admin/add-product" class="btn btn-primary btn-sm rounded">+ Add Product</a>
+        <% } %>
+      </div>
+  </div>
+  <div class="card mb-4">
+      <header class="card-header">
+          <div class="row align-items-center">
+
+            <div class="col-lg-4 col-md-6 me-auto">
+                <form action="/admin/search" method="post">
+                    <input type="search" placeholder="Search..." class="form-control" name="searchInput" id="searchInput">
+                </form>
+            </div>
+            
+        
+          </div>
+      </header> <!-- card-header end// -->
+      <div class="card-body">
+        <article class="itemlist header-row">
+            <div class="row align-items-center">
+                <div class="col-lg-4 col-sm-4 col-8 flex-grow-1 col-name">
+
+                        
+                        <div class="info">
+                            <h6 class="mb-0">PRODUCT</h6>
+                        </div>
+
+                </div>
+                <div class="col-lg-2 col-sm-2 col-4 col-price"> <h6>PRICE</h6></div>
+
+                <div class="col-lg-2 col-sm-2 col-4 col-status"><h6>CATEGORY</h6></div>
+                <div class="col-lg-1 col-sm-2 col-4 col-date"><h6>QUANTITY</h6></div>
+                <div class="col-lg-2 col-sm-2 col-4 col-action text-end">
+
+                </div>
+            </div> <!-- row .// -->
+        </article>
+        
+        <% prods.forEach(function(prod) { %>
+          <article class="itemlist">
+              <div class="row align-items-center">
+                  <div class="col-lg-4 col-sm-4 col-8 flex-grow-1 col-name">
+                      <a class="itemside" >
+                          <div class="left">
+                              <img src="/productImages/<%= prod.images[0] %>" class="img-sm img-thumbnail" alt="Item">
+                          </div>
+                          <div class="info">
+                              <h6 class="mb-0"><%= prod.brand %></h6>
+                          </div>
+                          <div class="info">
+                            <h6 class="mb-0"><%= prod.name %></h6>
+                        </div>
+                      </a>
+                  </div>
+                  <div class="col-lg-2 col-sm-2 col-4 col-price"> <s><%= prod.regularPrice %></s><%= prod.salePrice %></div>
+
+                  <div class="col-lg-2 col-sm-2 col-4 col-status"><%= prod.category.name %></div>
+                  <div class="col-lg-1 col-sm-2 col-4 col-date"><%= prod.stock %></div>
+                  <div class="col-lg-2 col-sm-2 col-4 col-action">
+                        <form action="/admin/editproduct" method="post">
+                            <button class="btn btn-sm font-sm btn-light rounded">
+                                edit
+                            </button>
+                            <input type="hidden" name="id" value="<%= prod._id %>">
+                        </form>
+                        <br>
+                        <form action="/admin/delete/<%= prod._id %>" method="post">
+                            <button class="btn btn-sm font-sm btn-danger rounded">
+                                <i class="material-icons md-delete_forever"></i> Delete
+                            </button>
+                        </form>
+                  </div>
+              </div> <!-- row .// -->
+          </article> <!-- itemlist  .// -->
+          <% }); %>
+
+      </div> <!-- card-body end// -->
+  </div> <!-- card end// -->
+
+</section> <!-- content-main end// -->
+
+<%-include('footer')-%>

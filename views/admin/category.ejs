@@ -1,0 +1,90 @@
+<%-include('header')-%>
+
+<%-include('nav')-%>
+
+<section class="content-main">
+  <div class="content-header">
+    <h2 class="content-title">Category</h2>
+  </div>
+  <div class="card mb-4">
+    <header class="card-header">
+      <div class="row gx-3">
+        <h4>Category List</h4>
+      </div>
+    </header> <!-- card-header end// -->
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% cat.forEach(function(cat, index) { %>
+                  <tr>
+                    <td>
+                      <div class="info pl-3">
+                        <h6 class="mb-0 title"><%= cat.name %></h6>
+                      </div>
+                    </td>
+                    <td>
+                      <form action="/admin/category/<%= cat._id %>" method="post">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input opacity-10 border border-success pl-3" type="checkbox" onchange="this.form.submit();" name="isActive" role="switch" id="flexSwitchCheck" <% if (cat.isActive) { %>checked<% } %>>
+                        </div>
+                      </form>
+                    </td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table> <!-- table-responsive.// -->
+          </div>
+        </div>
+      </div>
+    </div> <!-- card-body end// -->
+  </div> <!-- card end// -->
+
+  <div class="card">
+    <header class="card-header">
+      <div class="row gx-3">
+        <h4>Add Category</h4>
+      </div>
+    </header>
+    <div class="card-body">
+      <form action="/admin/add-category" method="post" onsubmit="return validateCat()">
+        <!-- Add input fields for category name and other details -->
+        <div class="form-group">
+          <label for="categoryName">Category Name</label>
+          <input type="text" class="form-control" id="categoryName" name="categoryName" >
+          <p id="err" class="text-danger"><%-message-%></p>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Add Category</button>
+      </form>
+    </div> <!-- card-body end// -->
+  </div> <!-- card end// -->
+</section> <!-- content-main end// -->
+
+<script>
+  function validateCat(){
+    const categoryName=document.getElementById('categoryName')
+    if (!categoryName.value.trim()) {
+      console.log('here')
+        err.innerHTML = 'Field is required';
+        setTimeout(() => {
+        err.textContent = '';
+        }, 5000);
+        return false;
+      }
+      return true
+    }
+    window.onload = function () {
+    setTimeout(() => {
+      err.textContent = '';
+    }, 5000);
+  }
+</script>
+<%-include('footer')-%>

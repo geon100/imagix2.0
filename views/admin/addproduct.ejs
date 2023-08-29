@@ -1,0 +1,165 @@
+<%-include('header')-%>
+
+<%-include('nav')-%>
+
+<section class="content-main">
+  <div class="row">
+      <div class="col-9">
+          <div class="content-header">
+              <h2 class="content-title">Add New Product</h2>
+              <a href="/admin/products" class="btn btn-primary btn-sm rounded">Back to Product page</a>
+          </div>
+      </div>
+      <div class="col-lg-6">
+          <div class="card mb-4">
+              <div class="card-header">
+                  <h4>Basic</h4>
+                  
+                  <p id="green" class="text-success font-weight-bold"><%-message-%></p>
+              </div>
+              <div class="card-body">
+                  <form action="/admin/add-product" method="post" enctype="multipart/form-data" onsubmit="return validate()">
+                      <div class="mb-4">
+                          <label for="product_name" class="form-label">Product title</label>
+                          <input type="text" placeholder="Type here" class="form-control" id="product_name" name="name">
+                      </div>
+                      <div class="mb-4">
+                          <label class="form-label">Full description</label>
+                          <textarea id="description" name="description" placeholder="Type here" class="form-control" rows="4"></textarea>
+                      </div>
+                      <div class="row">
+                          <div class="col-lg-4">
+                              <div class="mb-4">
+                                  <label class="form-label">Brand</label>
+                                  <div class="row gx-2">
+                                      <input  type="text" class="form-control" name="brand" id="brand">
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col-lg-4">
+                              <div class="mb-4">
+                                  <label class="form-label">Category</label>
+                                  <select name="category" id="category" class="form-control">
+                                    <option value=""></option>
+                                    <% cat.forEach(function(category) { %>
+                                      <option value="<%= category._id %>"><%= category.name %></option>
+                                    <% }); %>
+                                  </select>
+                              </div>
+                          </div>
+                          <div class="col-lg-4">
+                            <div class="mb-4">
+                                <label class="form-label">Stock</label>
+                                <input  type="text" class="form-control" name="stock" id="stock">
+                            </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-lg-6">
+                            <div class="mb-4">
+                                <label class="form-label">Regular price</label>
+                                <input  type="text" class="form-control" name="rprice" id="rprice">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <label class="form-label">Sale Price </label>
+                            <input  type="text" class="form-control" name="sprice" id="sprice" accept=".jpg, .jpeg, .png">
+                        </div>
+                      </div>
+                      <div class="card mb-4">
+                        <div class="card-header">
+                            <h4>Images</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="input-upload">
+                                <img src="assets/imgs/theme/upload.svg" alt="">
+                                <input class="form-control" type="file" multiple name="images" id="images">
+                            </div>
+                        </div>
+                        <div class="card-body">
+                          <button type="submit" class="btn btn-primary btn-sm rounded">Add Product</button>
+                          <p id="err" class="text-danger font-weight-bold"><%-errmessage-%></p>
+                      </div>
+                    </div> <!-- card end// -->
+                  </form>
+              </div>
+              
+          </div> <!-- card end// -->
+      </div>
+      </div>
+  </div>
+</section> <!-- content-main end// -->
+
+<script>
+  function validate(){
+    const name = document.getElementById('product_name');
+    const description = document.getElementById('description');
+    const brand = document.getElementById('brand');
+    const category = document.getElementById('category');
+    const rprice = document.getElementById('rprice');
+    const sprice = document.getElementById('sprice');
+    const stock = document.getElementById('stock');
+    const images = document.getElementById('images');
+
+    const errMessage = document.getElementById('err'); // Use the correct ID for the error message element
+    
+    if (!name.value.trim() || !description.value.trim() || !brand.value.trim() || !category.value.trim() || !rprice.value.trim() || !sprice.value.trim() || !stock.value.trim() || images.files.length===0) {
+      errMessage.textContent = 'All fields are required'; // Set the error message
+      setTimeout(() => {
+        errMessage.textContent = ''; // Clear the error message after a delay
+      }, 5000);
+      return false;
+    }
+    if(name.value.trim().length > 10 || brand.value.trim().length > 10){
+      errMessage.textContent = 'Title and Brand should have no more than 10 characters'; 
+      setTimeout(() => {
+        errMessage.textContent = ''; 
+      }, 5000);
+      return false;
+    }
+    if(isNaN(stock.value) || Number(stock.value) <= 0 ){
+      errMessage.textContent = 'stock should be valid number'; 
+      setTimeout(() => {
+        errMessage.textContent = ''; 
+      }, 5000);
+      return false;
+    }
+    if(isNaN(sprice.value) || Number(sprice.value) <= 0 ){
+      errMessage.textContent = 'Sale price should be valid number'; 
+      setTimeout(() => {
+        errMessage.textContent = ''; 
+      }, 5000);
+      return false;
+    }
+    if(isNaN(rprice.value) || Number(rprice.value) <= 0 ){
+      errMessage.textContent = 'Regular price should be valid number'; 
+      setTimeout(() => {
+        errMessage.textContent = ''; 
+      }, 5000);
+      return false;
+    }
+    if(images.files.length<3){
+      errMessage.textContent = 'There should be atleast 3 images.'; 
+      setTimeout(() => {
+        errMessage.textContent = ''; 
+      }, 5000);
+      return false;
+    }
+    if(images.files.length>3){
+      errMessage.textContent = 'Only 3 images allowed.'; 
+      setTimeout(() => {
+        errMessage.textContent = ''; 
+      }, 5000);
+      return false;
+    }
+    return true;
+  }
+  window.onload = function () {
+    setTimeout(() => {
+      green.textContent = '';
+      errMessage.textContent='';
+    }, 5000);
+  }
+</script>
+
+<%-include('footer')-%>

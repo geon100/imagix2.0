@@ -1,0 +1,104 @@
+<%- include('header') %>
+
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+  <div class="container">
+    <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+      <div class="col-first">
+        <h1>Login/Register</h1>
+        <nav class="d-flex align-items-center">
+          <a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
+          <a href="category.html">Login/Register</a>
+        </nav>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End Banner Area -->
+
+<!--================Login Box Area =================-->
+<section class="login_box_area section_gap">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="login_box_img">
+          <img class="img-fluid" src="img/login.jpg" alt="">
+          <div class="hover">
+            <h4>Want to go back to Login page?</h4>
+            <p>Click Below</p>
+            <a class="primary-btn" href="/login">Go Back</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="login_form_inner">
+          <h3>Enter OTP to log in</h3>
+          <form class="row login_form" action="/verify-otp" method="post" id="otpForm" novalidate="novalidate" onsubmit="return validateForm()">
+            <div class="col-md-12 form-group">
+              <input type="text" class="form-control" id="otp" name="otp" placeholder="Enter OTP" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter OTP'">
+              <input type="hidden" class="form-control" id="uid" name="uid" value=<%-uid-%>>
+            </div>
+            <div class="col-md-12 form-group">
+              <button type="submit" value="submit" class="primary-btn">Verify OTP</button>
+              <p id="err" class="text-danger font-weight-bold"></p>
+            </div>
+          </form>
+          <div id="otp-timer">
+            <p>Time left: <span id="timer"></span> seconds</p>
+          </div>
+          <div id="otp-timeout-message" style="display: none;">
+            <p>OTP timeout. Click below to resend OTP.</p>
+            <button id="resend-otp-button" class="primary-btn">Resend OTP</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!--================End Login Box Area =================-->
+
+<%- include('footer') %>
+
+<script>
+  const timerElement = document.getElementById('timer');
+  const otpForm = document.getElementById('otpForm');
+  const otpTimerDiv = document.getElementById('otp-timer');
+  const otpTimeoutMessage = document.getElementById('otp-timeout-message');
+  const resendOtpButton = document.getElementById('resend-otp-button');
+  let timeLeft = 30; 
+
+  const countdown = setInterval(function () {
+    if (timeLeft >= 0) {
+      timerElement.innerText = timeLeft;
+      timeLeft--;
+    } else {
+      clearInterval(countdown);
+      otpForm.style.display = 'none';
+      otpTimerDiv.style.display = 'none';
+      otpTimeoutMessage.style.display = 'block';
+    }
+  }, 1000);
+
+  resendOtpButton.addEventListener('click', function () {
+    // Reload the page to trigger sending a new OTP
+    location.reload();
+  });
+
+  function validateForm(){
+    if (otp.value.trim()==='') {
+        err.innerHTML = 'Field required'
+      setTimeout(() => {
+         err.innerHTML = ''
+      }, 5000)
+      return false;
+      }
+    if(isNaN(otp.value.trim())){
+      err.innerHTML = 'OTP should be Number'
+      setTimeout(() => {
+         err.innerHTML = ''
+      }, 5000)
+      return false;
+    }
+      return true
+  }
+</script>

@@ -1,0 +1,59 @@
+<%-include('header')-%>
+
+<div class="adminbody">
+  <div class="wrapper">
+          <div class="logo">
+              <img src="https://www.logolynx.com/images/logolynx/s_23/23938578fb8d88c02bc59906d12230f3.png" alt="">
+          </div>
+          <div class="text-center mt-4 name">
+              ADMIN LOGIN
+          </div>
+          <form class="p-3 mt-3" action="/admin" method="post" onsubmit="return validateForm()">
+              <div class="form-field d-flex align-items-center">
+                  <span class="far fa-user"></span>
+                  <input type="text" name="mail" id="userName" placeholder="Username" value="admin123@imagix.com">
+              </div>
+              <div class="form-field d-flex align-items-center">
+                  <span class="fas fa-key"></span>
+                  <input type="password" name="password" id="pwd" placeholder="Password" value="Admin@123">
+              </div>
+              <button class="btn mt-3">Login</button>
+          </form>
+          <div class="text-danger" id="err"> <%-message-%> </div>
+      </div>
+  </div>
+  <script>
+    function validateForm() {
+      const userName = document.getElementById("userName").value;
+      const password = document.getElementById("pwd").value;
+  
+      if (userName.trim() === ""|| password.trim()==="") {
+        err.innerHTML = 'Field required'
+      setTimeout(() => {
+         err.innerHTML = ''
+      }, 5000)
+      return false;
+      }
+      
+      const emailRegex=/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+
+      if (!emailRegex.test(userName.trim())) {
+      err.innerHTML = "Please enter a valid user name"
+      setTimeout(() => {
+         err.innerHTML = ''
+      }, 5000);
+    
+      return false;
+   }
+  
+      return true;
+    }
+
+    window.onload = function () {
+    setTimeout(() => {
+      err.textContent = '';
+    }, 5000);
+  }
+  </script>
+
+<%-include("footer")-%>

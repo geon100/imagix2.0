@@ -1,0 +1,129 @@
+<%-include('header')-%>
+
+
+	
+
+	<!-- Start Banner Area -->
+	<section class="banner-area organic-breadcrumb">
+		<div class="container">
+			<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+				<div class="col-first">
+					<h1>Login/Register</h1>
+					<nav class="d-flex align-items-center">
+						<a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
+						<a href="category.html">Login/Register</a>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- End Banner Area -->
+
+	<!--================Login Box Area =================-->
+	<section class="login_box_area section_gap">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="login_box_img">
+						<img class="img-fluid" src="img/login.jpg" alt="">
+						<div class="hover">
+							<h4>New to our website?</h4>
+							<p>There are advances being made in science and technology everyday, and a good example of this is the</p>
+							<a class="primary-btn" href="/register">Create an Account</a>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<div class="login_form_inner">
+						<h3>Log in to enter</h3>
+						<form class="row login_form" action="/login" method="post" id="contactForm" onsubmit="return validateForm()">
+							<div class="col-md-12 form-group">
+								<input type="text" class="form-control" id="username" name="username" placeholder="Username" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Username'">
+							</div>
+							<div class="col-md-12 form-group" id="password-field">
+								<input type="password" class="form-control" id="password" name="password" placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'">
+							</div>
+							<div class="col-md-12 form-group">
+								<div class="creat_account">
+									<input type="checkbox" id="otp" name="otpselector">
+									<label for="otp">Login Via OTP</label>
+								</div>
+							</div>
+							<div class="col-md-12 form-group">
+								<button type="submit" value="submit" class="primary-btn" id="login-button">Log In</button>
+								<button type="submit" class="primary-btn" id="send-otp-button" style="display:none;">Send OTP</button>
+								<p id="err" class="text-danger font-weight-bold"><%-errMessage-%></p>
+                <p class="text-success font-weight-bold"><%-message-%></p>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!--================End Login Box Area =================-->
+	
+	
+	
+	<script>
+		const passwordField = document.getElementById('password-field');
+		const sendOtpButton = document.getElementById('send-otp-button');
+		const loginButton = document.getElementById('login-button');
+		const otpCheckbox = document.getElementById('otp');
+		const loginForm = document.getElementById('contactForm');
+	
+		otpCheckbox.addEventListener('change', function () {
+			if (this.checked) {
+				passwordField.style.display = 'none';
+				sendOtpButton.style.display = 'block';
+				loginButton.style.display = 'none';
+				loginForm.action = '/send-otp'; // Change the form action to send OTP route
+			} else {
+				passwordField.style.display = 'block';
+				sendOtpButton.style.display = 'none';
+				loginButton.style.display = 'block';
+				loginForm.action = '/login'; // Change the form action back to login route
+			}
+			err.textContent = '';
+		});
+
+		function validateForm() {
+      const userName = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+  
+			setTimeout(() => {
+      err.textContent = '';
+    }, 5000);
+		
+			if (otpCheckbox.checked) {
+      // Handle validation for OTP login
+      if (userName.trim() === '') {
+        err.textContent = 'Field is required';
+        return false;
+      }
+    } else {
+      // Handle validation for password login
+      if (userName.trim() === '' || password.trim() === '') {
+        err.textContent = 'Fields are required';
+        return false;
+      }
+    }
+		const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!emailRegex.test(userName.trim())) {
+        err.textContent = 'Please enter a valid username.';
+        return false;
+      }
+    
+
+  
+      return true;
+    }
+
+		window.onload = function () {
+    setTimeout(() => {
+      err.textContent = '';
+    }, 5000);
+  }
+	</script>
+
+	<%- include('footer') %>

@@ -1,0 +1,180 @@
+
+
+<%-include('header')-%>
+
+
+
+	<!-- Start Banner Area -->
+	<section class="banner-area organic-breadcrumb">
+		<div class="container">
+			<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+				<div class="col-first">
+					<h1>Login/Register</h1>
+					<nav class="d-flex align-items-center">
+						<a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
+						<a href="category.html">Login/Register</a>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- End Banner Area -->
+
+	<!--================Login Box Area =================-->
+	<section class="login_box_area section_gap">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="login_box_img">
+                        
+						<img class="img-fluid" src="img/login.jpg" alt="">
+						<div class="hover">
+							<h4>Already have an account?</h4>
+							<p>Click below to go back to login page</p>
+							<a class="primary-btn" href="/login">Login</a>
+						</div>
+                        
+					</div>
+                    
+				</div>
+				<div class="col-lg-6">
+					<div class="login_form_inner">
+                        <div class="col-md-12">
+                            <p id="err2" class="text-danger font-weight-bold"><%-errMessage-%></p>
+                            <p id="err3" class="text-success font-weight-bold"><%-message-%></p>
+                        </div>
+						<h3>Sign up here</h3>
+						<form class="row login_form" action="" method="post" id="contactForm" onsubmit="return validate()">
+							<div class="col-md-12 form-group">
+								<input type="text" class="form-control" id="firstname" name="firstname" placeholder="Enter the First Name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter the First Name'">
+							</div>
+							<div class="col-md-12 form-group">
+								<input type="text" class="form-control" id="lastname" name="lastname" placeholder="Enter the Last Name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter the Last Name'">
+							</div>
+                            <div class="col-md-12 form-group">
+								<input type="email" class="form-control" id="email" name="email" placeholder="Enter your Email Id" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter your Email Id'">
+							</div>
+							<div class="col-md-12 form-group">
+								<input type="text" class="form-control" id="mobile" name="mobile" placeholder="Enter mobile number" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter mobile number'">
+							</div>
+                            <div class="col-md-12 form-group">
+								<input type="password" class="form-control" id="password" name="password" placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'">
+							</div>
+                            <div class="col-md-12 form-group">
+								<p id="err" class="text-danger font-weight-bold"></p>
+                                
+							</div>
+							<div class="col-md-12 form-group">
+								<button type="submit" value="submit" class="primary-btn">Sign Up</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!--================End Login Box Area =================-->
+<script>
+    function validate(){
+        const firstname=document.getElementById('firstname')
+        const lastname=document.getElementById('lastname')
+        const password=document.getElementById('password')
+        const mobile=document.getElementById('mobile')
+        const email=document.getElementById('email')
+
+        const err=document.getElementById('err')
+
+        const nameRegex=/^[A-Z][a-zA-Z'-]*$/
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+        const mobileRegex = /^[0-9]{10}$/;
+        const emailRegex=/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+
+        if (firstname.value.trim() === '') {
+      err.innerHTML = 'First Name is required'
+      setTimeout(() => {
+         err.innerHTML = ''
+      }, 5000)
+      return false;
+   }
+  
+   if(!nameRegex.test(firstname.value)){
+      err.innerHTML = 'First name not valid'
+      setTimeout(()=>{
+         err.innerHTML = ''
+      },5000)
+      return false;
+   }
+   if (lastname.value.trim() === '') {
+      err.innerHTML = 'Last name is required'
+      setTimeout(() => {
+         err.innerHTML = ''
+      }, 5000)
+      return false;
+   }
+   if(!nameRegex.test(lastname.value)){
+      err.innerHTML = 'Last name not valid'
+      setTimeout(()=>{
+         err.innerHTML = ''
+      },5000)
+      return false;
+   }
+   if (email.value.trim() === '') {
+      err.innerHTML = 'Email is required'
+      setTimeout(() => {
+         err.innerHTML = ''
+      }, 5000)
+      return false;
+   }
+   if (!emailRegex.test(email.value)) {
+      err.innerHTML = "Please enter a valid email"
+      setTimeout(() => {
+         err.innerHTML = ''
+      }, 5000);
+    
+      return false;
+   }
+
+   if (mobile.value.trim() === '') {
+      err.innerHTML = 'Field is required'
+      setTimeout(() => {
+         err.innerHTML = ''
+      }, 5000)
+      return false;
+   }
+
+   if(!mobileRegex.test(mobile.value)){
+      err.innerHTML = 'Please enter a valid number'
+      setTimeout(()=>{
+         err.innerHTML = ''
+      },5000)
+      return false;
+   }
+   if (password.value.trim() === '') {
+      err.innerHTML = 'Field is required'
+      setTimeout(() => {
+         err.innerHTML = ''
+      }, 5000)
+      return false;
+   }
+
+   if (!passwordRegex.test(password.value)) {
+      err.innerHTML = "Please enter a tight password"
+      setTimeout(() => {
+         err.innerHTML = ''
+      }, 5000);
+      return false;
+   }
+  
+   return true;
+    }
+
+    window.onload = function () {
+    setTimeout(() => {
+      err.textContent = '';
+      err2.textContent = '';
+      err3.textContent = '';
+    }, 5000);
+  }
+</script>
+
+<%-include("footer")-%>
