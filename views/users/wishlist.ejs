@@ -1,0 +1,106 @@
+  
+  <%-include('header')-%>
+
+  <!-- Start Banner Area -->
+    <section class="banner-area organic-breadcrumb">
+      <div class="container">
+          <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+              <div class="col-first">
+                  <h1>Wish-List</h1>
+              </div>
+          </div>
+      </div>
+  </section>
+  <!-- End Banner Area -->
+
+  <!--================Cart Area =================-->
+  <section class="cart_area">
+      <div class="container">
+          <div class="cart_inner">
+              <div class="table-responsive">
+                <% if(prods.length===0){ %>
+                    <h1 class="mb-5">No products added to Wish-List</h1>
+                    <a class="primary-btn" href="/products">Go to shop</a>
+                    <% } else { %>
+                  <table class="table">
+                      <thead>
+                          <tr>
+                              <th scope="col">Product</th>
+                              <th scope="col">Price</th>
+
+                          </tr>
+                      </thead>
+                      <tbody>
+                        
+                        <% for (let i = 0; i < prods.length; i++) { %>
+                            <tr>
+                              <td>
+                                <div class="media">
+                                  <div class="d-flex">
+                                    <img src="/productImages/<%= prods[i].images[0] %>" alt="cart_Images" class="img-fluid img-thumbnail" style="max-width: 100px; max-height: 100px; width: auto; height: auto;">
+                                  </div>
+                                  <div class="media-body">
+                                    <p><%= prods[i].brand + '' + prods[i].name %></p>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <h5>Rs. <%= prods[i].salePrice %></h5>
+                              </td>
+                              <% if(prods[i].stock===0) { %>
+
+                                <td>
+                                    <div class="product_count">
+                                        <h5 class="text-danger">Out of stock</h5>
+                                    </div>
+                                  </td>
+                                  
+                                  <td>
+                                    <a href="" class="btn btn-danger"><span class="ti-trash"></span></a>
+                                  </td>
+                                    
+                              <%} else { %>
+                              
+                              <td>
+                                <form action="/addToCart" method="post" style="display: inline;">
+                                  <input type="hidden" value="<%= prods[i]._id %>" name="id">
+                                  <button class="btn btn-success " ><span class="ti-bag"></button>
+                                </form>
+                                <a href="javascript:void(0);" onclick="confirmDeleteWishlistItem('<%= prods[i]._id %>')" class="btn btn-danger"><span class="ti-trash"></span></a>
+
+                              </td>
+                              
+                              <% } %>
+                            </tr>
+                          <% } %>
+                         
+              
+
+                      </tbody>
+                  </table>
+                  <% } %>
+              </div>
+          </div>
+      </div>
+  </section>
+  <!--================End Cart Area =================-->
+<script>
+    function confirmDeleteWishlistItem(productId) {
+  Swal.fire({
+    title: 'Remove from Wishlist',
+    text: 'Are you sure you want to remove this item from your wishlist?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, remove it',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // User clicked "Yes, remove it," so proceed with the removal action
+      window.location.href = `/delWish?id=${productId}`;
+    }
+  });
+}
+
+</script>
+  <%-include('footer')-%>

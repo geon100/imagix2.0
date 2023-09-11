@@ -78,7 +78,7 @@ $(document).ready(function(){
       items:1,
       autoplay:false,
       autoplayTimeout: 5000,
-      loop:true,
+      loop:false,
       nav:false,
       dots:true
     });

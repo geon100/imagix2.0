@@ -21,6 +21,7 @@
                 <tr>
                   <th>Name</th>
                   <th>Status</th>
+                  <th>---</th>
                 </tr>
               </thead>
               <tbody>
@@ -35,6 +36,14 @@
                       <form action="/admin/category/<%= cat._id %>" method="post">
                         <div class="form-check form-switch">
                           <input class="form-check-input opacity-10 border border-success pl-3" type="checkbox" onchange="this.form.submit();" name="isActive" role="switch" id="flexSwitchCheck" <% if (cat.isActive) { %>checked<% } %>>
+                        </div>
+                      </form>
+                    </td>
+                    <td>
+                      <form action="/admin/editcategory" method="get">
+                        <div class="form-check form-switch">
+                          <input type="hidden" value="<%= cat._id %>" name="id">
+                          <button type="submit" class="btn btn-primary">Edit</button>
                         </div>
                       </form>
                     </td>
@@ -66,6 +75,7 @@
       </form>
     </div> <!-- card-body end// -->
   </div> <!-- card end// -->
+
 </section> <!-- content-main end// -->
 
 <script>

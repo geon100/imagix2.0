@@ -1,0 +1,52 @@
+<%-include('header')-%>
+<%-include('nav')-%>
+
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">Orders List</h2>
+        </div>
+    </div>
+    <div>
+        <% if (orders.length === 0) { %>
+        <h4>No Orders</h4>
+        <% } else { %>
+        <div class="table">
+            <table id="myTable" class="table table-striped">
+                <thead class="bg-dark text-danger">
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Order Date</th>
+                        <th>Customer</th>
+                        <th>Payment Method</th>
+                        <th>Total Amount</th>
+                        <th>OrderStatus</th>
+                        <th><p id="test"></p></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% orders.forEach(function(order, index) { %>
+                    <tr>
+                        <td><%= order.orderID %></td>
+                        <td><%= order.orderDate %></td>
+                        <td><%= order.customer.firstname+' '+order.customer.lastname %></td>
+                        <td><%= order.paymentMethod %></td>
+                        <td><%= order.totalAmount %></td>
+                        <% if (order.orderStatus === 'Delivered') { %>
+                        <td class="text-success"><%= order.orderStatus %></td>
+                        <% } else if (order.orderStatus === 'Cancelled') { %>
+                        <td class="text-danger"><%= order.orderStatus %></td>
+                        <% } else { %>
+                        <td class="text-primary"><%= order.orderStatus %></td>
+                        <% } %>
+                        <td><a href="/admin/orderview?id=<%= order._id %>" class="btn btn-info">View</a></td>
+                    </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+        <% } %>
+    </div>
+</section> <!-- content-main end// -->
+
+<%-include('footer')-%>

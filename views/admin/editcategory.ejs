@@ -1,0 +1,46 @@
+<%-include('header')-%>
+
+<%-include('nav')-%>
+
+<div class="card">
+  <header class="card-header">
+    <div class="row gx-3">
+      <h4>Edit Category</h4>
+    </div>
+  </header>
+  <div class="card-body">
+    <form action="/admin/update-category" method="post" onsubmit="return validateCat()">
+      <!-- Add input fields for category name and other details -->
+      <div class="form-group">
+        <label for="categoryName">Category Name</label>
+        <input type="hidden" name="id" value="<%=cat._id%>">
+        <input type="text" class="form-control" id="categoryName" name="categoryName" value="<%=cat.name%>">
+        <p id="err" class="text-danger"><%-message-%></p>
+      </div>
+      <button type="submit" class="btn btn-primary mt-3">Update Category</button>
+      <a href="/admin/category" class="btn btn-danger mt-3">Cancel</a>
+    </form>
+  </div> <!-- card-body end// -->
+</div> <!-- card end// -->
+
+<script>
+  function validateCat(){
+    const categoryName=document.getElementById('categoryName')
+    if (!categoryName.value.trim()) {
+      console.log('here')
+        err.innerHTML = 'Field is required';
+        setTimeout(() => {
+        err.textContent = '';
+        }, 5000);
+        return false;
+      }
+      return true
+    }
+    window.onload = function () {
+    setTimeout(() => {
+      err.textContent = '';
+    }, 5000);
+  }
+</script>
+<br><br>
+<%-include('footer')-%>

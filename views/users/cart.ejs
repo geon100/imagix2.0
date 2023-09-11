@@ -1,0 +1,197 @@
+  
+  <%-include('header')-%>
+
+  <!-- Start Banner Area -->
+    <section class="banner-area organic-breadcrumb">
+      <div class="container">
+          <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+              <div class="col-first">
+                  <h1>Shopping Cart</h1>
+              </div>
+          </div>
+      </div>
+  </section>
+  <!-- End Banner Area -->
+
+  <!--================Cart Area =================-->
+  <section class="cart_area">
+      <div class="container">
+          <div class="cart_inner">
+              <div class="table-responsive">
+                <% if(prods.length===0){ %>
+                    <h1 class="mb-5">No products added to Cart</h1>
+                    <a class="primary-btn" href="/products">Go to shop</a>
+                    <% } else { %>
+                  <table class="table">
+                      <thead>
+                          <tr>
+                              <th scope="col">Product</th>
+                              <th scope="col">Price</th>
+                              <th scope="col">Quantity</th>
+                              <th scope="col">Total</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                        
+                        <% for (let i = 0; i < prods.length; i++) { %>
+                            <tr>
+                              <td>
+                                <div class="media">
+                                  <div class="d-flex">
+                                    <img src="/productImages/<%= prods[i].images[0] %>" alt="cart_Images" class="img-fluid img-thumbnail" style="max-width: 100px; max-height: 100px; width: auto; height: auto;">
+                                  </div>
+                                  <div class="media-body">
+                                    <p><%= prods[i].brand + '' + prods[i].name %></p>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <h5>Rs. <%= prods[i].salePrice %></h5>
+                              </td>
+                              <% if(prods[i].stock===0) { %>
+
+                                <td>
+                                    <div class="product_count">
+                                        <h5 class="text-danger">Out of stock</h5>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <h5 class="font-weight-bold">-</h5>
+                                  </td>
+                                  <td>
+                                    <a href="/cart/<%= prods[i]._id %>" class="btn btn-danger"><span class="ti-trash"></span></a>
+                                  </td>
+                                    
+                              <%} else { %>
+                              <td>
+                                <button onclick="decreaseQty(<%= i %>)" class="reduced items-count btn btn-danger" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="29" height="29" fill="currentColor" class="bi bi-dash-lg" viewBox="0 0 16 16">
+                                  <path fill-rule="evenodd" d="M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8Z"/>
+                                </svg></i></button>
+                                <div class="product_count">
+                                  <input type="number" name="qty" id="qty_<%= i %>" min="1" max="<%= prods[i].stock %>" value="<%= prods[i].quantity %>" title="Quantity:" class="input-text qty" readonly onchange="updateTotal(<%= i %>)">           
+                                </div>
+                                <button onclick="increaseQty(<%= i %>)" class="increase items-count btn btn-primary" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="29" height="29" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                  <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
+                                </svg></button>
+                              </td>
+                              <td>
+                                <h5 id="total_<%= i %>">Rs.<%= prods[i].quantity * prods[i].salePrice %></h5>
+                              </td>
+                              <td>
+                                <a href="javascript:void(0);" onclick="confirmDelete('<%= prods[i]._id %>')" class="btn btn-danger"><span class="ti-trash"></span></a>
+
+                              </td>
+                              <% } %>
+                            </tr>
+                          <% } %>
+                         
+                          <tr class="bottom_button">
+                              <td><h3 id="grandtotal">Grand Total : Rs.<%= gtotal%></h3><hr></td>
+                              <td></td>
+                              <td></td>
+                              <td>
+                                  <div class="cupon_text d-flex align-items-center">
+                                      <!-- <input type="text" placeholder="Coupon Code"> -->
+                                      <a class="primary-btn" href="/products">Continue Shopping</a>
+                                      <a class="gray_btn" href="/checkout">Proceed to checkout</a>
+                                  </div>
+                              </td>
+                              
+                          </tr>
+
+                      </tbody>
+                  </table>
+                  <% } %>
+              </div>
+          </div>
+      </div>
+  </section>
+  <!--================End Cart Area =================-->
+<script>
+  function confirmDelete(productId) {
+  Swal.fire({
+    title: 'Delete Product',
+    text: 'Are you sure you want to delete this product from your cart?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // User clicked "Yes, delete it," so proceed with the deletion action
+      window.location.href = `/cart/${productId}`;
+    }
+  });
+}
+
+    const prodsData = <%- JSON.stringify(prods) %>;
+    console.log(prodsData)
+function updateTotal(i) {
+  const qtyInput = document.getElementById(`qty_${i}`);
+  const totalElement = document.getElementById(`total_${i}`);
+  const price = parseFloat(prodsData[i].salePrice); // Parse price as a float
+  const maxStock = parseInt(prodsData[i].stock); // Parse maxStock as an integer
+
+  let quantity = parseInt(qtyInput.value);
+
+  // Ensure quantity is within the allowed range
+  if (quantity < 1) {
+    quantity = 1;
+  } else if (quantity > maxStock) {
+    quantity = maxStock;
+    qtyInput.value = quantity;
+  }
+
+  const total = quantity * price; // Calculate the total as a regular number
+  console.log('index:'+i)
+  $.ajax({
+          url: '/change-product-quantity',
+          method: 'PUT',
+          data: {
+            proId: prodsData[i]._id,
+            quantity: quantity,
+          },
+          success: (response) => {
+            console.log(response.status)
+          }
+        })
+  totalElement.textContent = `Rs. ${total.toFixed(2)}`;
+
+  let newGrandTotal = 0;
+  for (let j = 0; j < prodsData.length; j++) {
+    const qty = parseInt(document.getElementById(`qty_${j}`).value);
+    const price = parseFloat(prodsData[j].salePrice);
+    newGrandTotal += qty * price;
+  }
+
+  // Update the grand total element
+  const grandTotalElement = document.getElementById('grandtotal');
+  grandTotalElement.textContent = `Grand Total : Rs. ${newGrandTotal.toFixed(2)}`;
+}
+
+
+  function increaseQty(i) {
+    const qtyInput = document.getElementById(`qty_${i}`);
+    let quantity = parseInt(qtyInput.value);
+    const maxStock = prodsData[i].stock;
+
+    if (quantity < parseInt(maxStock)) {
+      quantity++;
+      qtyInput.value = quantity;
+      updateTotal(i);
+    }
+  }
+
+  function decreaseQty(i) {
+    const qtyInput = document.getElementById(`qty_${i}`);
+    let quantity = parseInt(qtyInput.value);
+
+    if (quantity > 1) {
+      quantity--;
+      qtyInput.value = quantity;
+      updateTotal(i);
+    }
+  }
+</script>
+  <%-include('footer')-%>

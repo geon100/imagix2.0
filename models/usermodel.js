@@ -31,10 +31,16 @@ const userSchema = new mongoose.Schema({
     address:{
         type:Array
     },
-    cart:{
+    cart: [
+        {
+          id: String, // or ObjectId, depending on your use case
+          quantity: Number
+        }
+      ],
+    wishlist: {
         type:Array
     }
-
+    
 });
 
 //Export the model

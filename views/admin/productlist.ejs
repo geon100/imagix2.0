@@ -90,6 +90,21 @@
 
       </div> <!-- card-body end// -->
   </div> <!-- card end// -->
+  <div class="pagination-area mt-30 mb-50">
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-start">
+            <% if (cp > 1) { %>
+                <li class="page-item"><a class="page-link" href="/admin/products?page=<%= cp - 1 %>"><i class="material-icons md-chevron_left"></i></a></li>
+            <% } %>
+            
+                <li class="page-item active"><a class="page-link" href="javascript:void(0)"><%= cp %></a></li>
+            
+            <% if (remain>0) { %>
+                <li class="page-item"><a class="page-link" href="/admin/products?page=<%= cp + 1 %>"><i class="material-icons md-chevron_right"></i></a></li>
+            <% } %>
+        </ul>
+    </nav>
+</div>
 
 </section> <!-- content-main end// -->
 

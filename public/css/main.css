@@ -1023,7 +1023,7 @@ h1, h2, h3, h4, h5, h6 {
     background: #fff;
     padding: 0px;
     border: 0px;
-    border-radius: 0px; }
+    border-radius: 60px; }
     @media (max-width: 991px) {
       .header_area .navbar .navbar-collapse {
         margin-top: 30px; }
@@ -1061,7 +1061,7 @@ h1, h2, h3, h4, h5, h6 {
           border-radius: 0px;
           box-shadow: none;
           margin: 0px;
-          background: #fff; }
+          background: #ffffff; }
           @media (min-width: 992px) {
             .header_area .navbar .nav .nav-item.submenu ul {
               position: absolute;
@@ -1206,7 +1206,7 @@ h1, h2, h3, h4, h5, h6 {
 /* banner area css
 ============================================================================================ */
 .banner-area {
-  background: url(https://i.pinimg.com/originals/23/5c/d1/235cd179e3eec4cd5efb74e2a887b292.jpg) center no-repeat;
+  background: url(https://wallpapercave.com/wp/wp5970155.jpg) center no-repeat;
   background-size: cover;
   position: relative; }
   @media (max-width: 768px) {
@@ -1215,7 +1215,7 @@ h1, h2, h3, h4, h5, h6 {
   .banner-area .active-banner-slider .owl-nav {
     position: absolute;
     right: 0;
-    bottom: -200px; }
+    bottom: -100px; }
     @media (max-width: 1920px) {
       .banner-area .active-banner-slider .owl-nav {
         right: -115px; } }
@@ -1253,7 +1253,8 @@ h1, h2, h3, h4, h5, h6 {
           font-size: 35px;
           line-height: 46px; } }
     .banner-area .banner-content p {
-      margin: 0; }
+      margin: 0; 
+    color: white;}
   @media (max-width: 991px) {
     .banner-area .banner-img {
       display: none; } }
@@ -1283,7 +1284,7 @@ h1, h2, h3, h4, h5, h6 {
     color: #222222; }
 
 .organic-breadcrumb {
-  background: url(../img/banner/common-banner.jpg) center no-repeat;
+  background: url(https://img3.goodfon.com/wallpaper/nbig/c/fc/canon-kamera-fon-5289.jpg) center no-repeat;
   background-size: cover;
   padding-top: 130px; }
   @media (max-width: 991px) {

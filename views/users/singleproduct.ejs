@@ -18,35 +18,36 @@
     <div class="row s_product_inner">
       <div class="col-lg-6">
         <div class="s_Product_carousel">
-          <div class="single-prd-item">
-              <img class="img-fluid zoom" src="/productImages/<%= prod.images[0] %>" id="myimage" alt="img1">
-          </div>
-
-          <div class="single-prd-item">
-            <img class="img-fluid img-rounded zoom" src="/productImages/<%= prod.images[1] %>" alt="img2">
-          </div>
-          <div class="single-prd-item">
-            <img class="img-fluid zoom" src="/productImages/<%= prod.images[2] %>" alt="img3">
-          </div>
+          <% prod.images.forEach(function(image) { %>
+            <div class="single-prd-item">
+              <img class="img-fluid zoom" src="/productImages/<%= image %>" id="myimage" alt="Product Image">
+            </div>
+          <% }); %>
         </div>
       </div>
+      
       <div class="col-lg-5 offset-lg-1">
         <div class="s_product_text">
           <h3><%= prod.brand + ' ' +prod.name %></h3>
           <h2>Rs.<%= prod.salePrice %></h2>
           <ul class="list">
             <li><span class="font-weight-bold">Category</span> : <%= cat.name %></li>
-            <li><span class="font-weight-bold">Availibility</span> : <% if (prod.stock>0) { %> In Stock<% } else { %> OUT OF STOCK <% } %></li>
+            <li><span class="font-weight-bold">Availibility</span> : <% if (prod.stock>0) { %> <span class="text-success">In Stock</span><% } else { %> <span class="text-danger font-weight-bold">OUT OF STOCK</span> <% } %></li>
           </ul>
           <p><%= prod.description %></p>
+          <form action="/addToCart" onclick="" method="post" id="cartform">
+            <% if (prod.stock>0) { %>
           <div class="product_count">
             <label for="qty">Quantity:</label>
-              <input type="number" min="1" value="1">
+            <input type="number" min="1" id="qty" name="qty" value="1" onchange="updateQuantity(this, <%= prod.stock %>)">
+            <input type="hidden" value="<%= prod._id %>" name="id">
           </div>
           <div class="card_area d-flex align-items-center">
-            <a class="primary-btn" href="#">Add to Cart</a>
+            <button type="button" class="primary-btn" onclick="triggerSweetAlert()">Add to Cart</button>
+            </form>
             <!-- <a class="icon_btn" href="#"><i class="lnr lnr lnr-diamond"></i></a> -->
-            <a class="icon_btn" href="#"><i class="lnr lnr lnr-heart"></i></a>
+            <a class="icon_btn" href="/addWish?id=<%= prod._id %>"><i class="lnr lnr lnr-heart"></i></a>
+            <% } %>
           </div>
         </div>
       </div>
@@ -204,7 +205,25 @@
 <!--================End Product Description Area =================-->
 
 <script>
-  imageZoom("myimage", "myresult");
+  function updateQuantity(inputElement, maxStock) {
+    if (inputElement.value > maxStock) {
+      inputElement.value = 1;
+    }
+  }
+  function triggerSweetAlert() {
+      Swal.fire({
+        title: 'Add to Cart?',
+        // text: 'Add to cart?',
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        preConfirm: () => {
+          // Call the function to handle form submission
+          document.getElementById('cartform').submit();
+        },
+      });
+    }
 </script>
 
 

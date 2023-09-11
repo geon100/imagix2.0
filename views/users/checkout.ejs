@@ -1,0 +1,298 @@
+<%-include('header')-%>
+
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+  <div class="container">
+      <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+          <div class="col-first">
+              <h1>CHECKOUT</h1>
+          </div>
+      </div>
+  </div>
+</section>
+<!-- End Banner Area -->
+
+<!--================Checkout Area =================-->
+<section class="checkout_area section_gap">
+  <div class="container">
+      <div class="billing_details">
+          <div class="row">
+            <div class="col-lg-8">
+              <a href="" class="btn btn-warning btn-rounded mb-4" data-toggle="modal" data-target="#AddressModal">ADD NEW ADDRESS</a>
+              <% if (user.address.length === 0) { %>
+                  <h1>No address</h1>
+              <% } else { %>
+                  <h5>Choose an address:</h5>
+                  <form action="/placeorder" method="post">
+                      <% user.address.forEach(function(addr, index) { %>
+                          <div class="card mb-4">
+                              <div class="card-header">
+                                  <label>
+                                      <input type="radio" name="selectedAddress" value="<%= addr.name %>,<%= `${addr.fullAddress}, ${addr.pincode}, ${addr.city}, ${addr.district}` %>,<%= `${addr.mobile}` %>,<%= `${addr.email}` %>" <% if (index === 0) { %>checked<% } %>>
+                                      <%= addr.name %>
+                                  </label>
+                              </div>
+                              <div class="card-body">
+                                  <div class="row">
+                                      <div class="col-sm-3 col-md-2 col-5">
+                                          <label style="font-weight:bold;">Address</label>
+                                      </div>
+                                      <div class="col-md-8 col-6">
+                                          <%= `${addr.fullAddress}, ${addr.pincode}, ${addr.city}, ${addr.district}` %>
+                                      </div>
+                                  </div>
+                                  <hr />
+                                  <div class="row">
+                                      <div class="col-sm-3 col-md-2 col-5">
+                                          <label style="font-weight:bold;">Mobile</label>
+                                      </div>
+                                      <div class="col-md-8 col-6">
+                                          <label><%= `${addr.mobile}` %></label>
+                                      </div>
+                                  </div>
+                                  <hr />
+                                  <div class="row">
+                                      <div class="col-sm-3 col-md-2 col-5">
+                                          <label style="font-weight:bold;">Email</label>
+                                      </div>
+                                      <div class="col-md-8 col-6">
+                                          <%= `${addr.email}` %>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      <% }); %>
+                  
+              <% } %>
+          </div>
+          
+              <div class="col-lg-4">
+                  <div class="order_box">
+                      <h2>Your Order</h2>
+                      <ul class="list">
+                        
+                          
+                          <li><a href="#">Product<span>Total</span></a></li>
+                          <% prods.forEach(function(prod, index) { %>
+                            <li><a href="#"><%= prod.brand+' '+prod.name %> <span class="middle">x <%= prod.quantity %></span> <span class="last" >Rs. <%= prod.quantity*prod.salePrice %></span></li>
+                          <% }); %>
+                      </ul>
+                      <ul class="list list_2">
+                          <li><a href="#" >Total <span id="total">Rs. <%= gTotal %></span></a></li>
+                          <input type="hidden" value="<%= gTotal %>" name="total">
+                      </ul>
+                      
+                      <div class="payment_item">
+                          <div class="radion_btn">
+                              <input type="radio" id="f-option5" name="payment" value="COD" checked>
+                              <label for="f-option5">Cash On Delivery</label>
+                              <div class="check"></div>
+                          </div>
+                          <p>You can make payment when you receive the product</p>
+                      </div>
+                      <div class="payment_item active">
+                          <div class="radion_btn">
+                              <input type="radio" id="f-option6" name="payment" value="online">
+                              <label for="f-option6">Pay Now</label>
+                              <img src="img/product/card.jpg" alt="">
+                              <div class="check"></div>
+                          </div>
+                          <p>Pay via PayPal; you can pay with your credit card if you don’t have a PayPal
+                              account.</p>
+                      </div>
+                      <!-- <div class="creat_account">
+                          <input type="checkbox" id="f-option4" name="selector">
+                          <label for="f-option4">I’ve read and accept the </label>
+                          <a href="#">terms & conditions*</a>
+                      </div> -->
+                      <button class="primary-btn">Place Order</button>
+                    </form>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+<!--================End Checkout Area =================-->
+<div id="AddressModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">ADD NEW ADDRESS</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="col-lg-8">
+          <form class="row contact_form" action="/add-address?checkout=1" method="post" onsubmit="return validate()">
+            <div class="col-md-12 form-group">
+              <label for="toggleInfo">Show Additional Information</label>
+              <input type="checkbox" id="toggleInfo" onchange="toggleInfoFields()">
+          </div>
+            <div id="additionalInfo" style="display: none;">
+              <div class="col-md-12 form-group p_star">
+                  <input type="text" class="form-control" id="fname" name="fname" placeholder="FIRST NAME" value="<%= user.firstname %>">
+              </div>
+              <div class="col-md-12 form-group p_star">
+                  <input type="text" class="form-control" id="lname" name="lname" placeholder="LAST NAME" value="<%= user.lastname %>">
+              </div>
+
+              <div class="col-md-12 form-group p_star">
+                  <input type="text" class="form-control" id="number" name="number" placeholder="MOBILE" value="<%= user.mobile %>">
+                  
+              </div>
+              <div class="col-md-12 form-group p_star">
+                  <input type="text" class="form-control" id="email" name="email" placeholder="EMAIL" value="<%= user.email %>">
+              </div>
+            </div>
+              <div class="col-md-12 form-group p_star">
+                  <input type="text" class="form-control" id="addr1" name="addr1" placeholder="ADDRESS LINE 1">
+                  
+              </div>
+              <div class="col-md-12 form-group p_star">
+                  <input type="text" class="form-control" id="addr2" name="addr2" placeholder="ADDRESS LINE 2">
+                  
+              </div>
+              <div class="col-md-6 form-group p_star">
+                <input type="text" class="form-control" id="city" name="city" placeholder="CITY">
+            </div>
+            <div class="col-md-6 form-group p_star">
+              <input type="text" class="form-control" id="district" name="district" placeholder="DISTRICT">
+          </div>
+              
+              <div class="col-md-12 form-group">
+                  <input type="text" class="form-control" id="pincode" name="pincode" placeholder="PIN CODE">
+              </div>
+      </div>
+      </div>
+      <div class="modal-footer">
+        <p id="err" class="text-danger font-weight-bold"></p>
+        <button type="submit" class="btn btn-success" >ADD</button>
+      </div>
+    </form>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function validate() {
+        const firstname=document.getElementById('fname')
+        const lastname=document.getElementById('lname')
+        const mobile=document.getElementById('number')
+        const email=document.getElementById('email')
+
+        const addr1=document.getElementById('addr1')
+        const addr2=document.getElementById('addr2')
+        const city=document.getElementById('city')
+        const district=document.getElementById('district')
+        const pincode=document.getElementById('pincode')
+
+        const err=document.getElementById('err')
+
+        const nameRegex=/^[A-Z][a-zA-Z'-]*$/
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+        const mobileRegex = /^[0-9]{10}$/;
+        const emailRegex=/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+
+        if (firstname.value.trim() === '') {
+      err.innerHTML = 'First Name is required'
+      setTimeout(() => {
+         err.innerHTML = ''
+      }, 5000)
+      return false;
+   }
+  
+   if(!nameRegex.test(firstname.value)){
+      err.innerHTML = 'First name not valid'
+      setTimeout(()=>{
+         err.innerHTML = ''
+      },5000)
+      return false;
+   }
+   if (lastname.value.trim() === '') {
+      err.innerHTML = 'Last name is required'
+      setTimeout(() => {
+         err.innerHTML = ''
+      }, 5000)
+      return false;
+   }
+   if(!nameRegex.test(lastname.value)){
+      err.innerHTML = 'Last name not valid'
+      setTimeout(()=>{
+         err.innerHTML = ''
+      },5000)
+      return false;
+   }
+   if (email.value.trim() === '') {
+      err.innerHTML = 'Email is required'
+      setTimeout(() => {
+         err.innerHTML = ''
+      }, 5000)
+      return false;
+   }
+   if (!emailRegex.test(email.value)) {
+      err.innerHTML = "Please enter a valid email"
+      setTimeout(() => {
+         err.innerHTML = ''
+      }, 5000);
+    
+      return false;
+   }
+
+   if (mobile.value.trim() === '') {
+      err.innerHTML = 'Field is required'
+      setTimeout(() => {
+         err.innerHTML = ''
+      }, 5000)
+      return false;
+   }
+
+   if(!mobileRegex.test(mobile.value)){
+      err.innerHTML = 'Please enter a valid number'
+      setTimeout(()=>{
+         err.innerHTML = ''
+      },5000)
+      return false;
+   }
+   if (addr1.value.trim() === '' || addr2.value.trim()===''||city.value.trim() === '' || district.value.trim()===''||pincode.value.trim()==='') {
+      err.innerHTML = 'Address Fields are required'
+      setTimeout(() => {
+         err.innerHTML = ''
+      }, 5000)
+      return false;
+   }
+
+   if (!/^[0-9]{6}$/.test(pincode.value.trim())) {
+    err.innerHTML = 'Pin code should be valid'
+      setTimeout(() => {
+         err.innerHTML = ''
+      }, 5000)
+      return false;
+   }
+  
+   return true;
+    }
+  
+    function toggleInfoFields() {
+        var additionalInfo = document.getElementById("additionalInfo");
+        var checkbox = document.getElementById("toggleInfo");
+
+        if (checkbox.checked) {
+            additionalInfo.style.display = "block";
+            document.getElementById("fname").value = "";
+            document.getElementById("lname").value = "";
+            document.getElementById("number").value = "";
+            document.getElementById("email").value = "";
+        } else {
+            additionalInfo.style.display = "none";
+            document.getElementById("fname").value = "<%= user.firstname%>";
+            document.getElementById("lname").value = "<%= user.lastname%>";
+            document.getElementById("number").value = "<%= user.mobile%>";
+            document.getElementById("email").value = "<%= user.email%>";
+        }
+    }
+    
+</script>
+<%-include('footer')-%>

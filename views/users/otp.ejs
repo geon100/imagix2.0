@@ -33,7 +33,14 @@
       <div class="col-lg-6">
         <div class="login_form_inner">
           <h3>Enter OTP to log in</h3>
-          <form class="row login_form" action="/verify-otp" method="post" id="otpForm" novalidate="novalidate" onsubmit="return validateForm()">
+          
+          <form class="row login_form" 
+                         <% if (locals.forget) { %>
+                           action="/verify-forgot"
+                         <% } else { %>
+                           action="/verify-otp"
+                         <% } %> 
+              method="post" id="otpForm" novalidate="novalidate" onsubmit="return validateForm()">
             <div class="col-md-12 form-group">
               <input type="text" class="form-control" id="otp" name="otp" placeholder="Enter OTP" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter OTP'">
               <input type="hidden" class="form-control" id="uid" name="uid" value=<%-uid-%>>

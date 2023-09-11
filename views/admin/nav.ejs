@@ -1,4 +1,5 @@
-    <!-- SideBar Begins here-->
+
+<!-- SideBar Begins here-->
     <div class="screen-overlay"></div>
     <aside class="navbar-aside" id="offcanvas_aside">
         <div class="aside-top">
@@ -31,6 +32,11 @@
                 <li class="menu-item <%= isActive('/category') ? 'active' : '' %>">
                     <a class="menu-link" href="/admin/category"> <i class="icon material-icons md-category"></i>
                         <span class="text">Category</span>
+                    </a>
+                </li>
+                <li class="menu-item <%= isActive('/orders') ? 'active' : '' %>">
+                    <a class="menu-link" href="/admin/orders"> <i class="icon material-icons md-category"></i>
+                        <span class="text">Order</span>
                     </a>
                 </li>
             </ul>
@@ -81,3 +87,4 @@
             </div>
         </header>
         <!-- NavBar Ends here -->
+      

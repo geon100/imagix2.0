@@ -1,0 +1,124 @@
+<%-include('header')-%>
+<%-include('nav')-%>
+
+<!-- Start Banner Area -->
+<!-- <section class="banner-area organic-breadcrumb">
+  <div class="container">
+    <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+      <div class="col-first">
+        <h1>Order</h1>
+      </div>
+    </div>
+  </div>
+</section> -->
+<!-- End Banner Area -->
+
+<!--================Order Details Area =================-->
+<section class="order_details section_gap">
+  <div class="container">
+    
+    <div class="row order_d_inner mt-5">
+      <div class="col-lg-4">
+        <div class="details_item">
+          <h4>Order ID</h4>
+          <h3><%= order.orderID %></h3>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="details_item">
+          <h4>Address:</h4>
+          <p><%= order.Address %></p>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="details_item">
+          <h4>Estimated Delivery Date:</h4>
+          <p><%= order.deliveryDate %></p>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="details_item">
+          <h4>Change Status</h4>
+          <% if (order.orderStatus==='Cancelled') { %>
+            <h6 class="text-danger px-2">Cancelled</h6> 
+        <% } else { %>
+          <form action="/admin/changeStatus" method="post">
+            <input type="hidden" value="<%= order._id%>" name="id">
+        <select name="orderStatus" class="form-select" onchange="this.form.submit()" >
+          <option value="Pending" <% if (order.orderStatus==='Pending') { %>selected<% } %>>Pending</option>
+          <option value="Processing" <% if (order.orderStatus==='Processing') { %>selected<% } %>>Processing</option>
+          <option value="Shipped" <% if (order.orderStatus==='Shipped') { %>selected<% } %>>Shipped</option>
+          <option value="Delivered" <% if (order.orderStatus==='Delivered') { %>selected<% } %>>Delivered</option>
+          <% if (order.orderStatus!='Delivered') { %>
+          <option value="Cancelled" <% if (order.orderStatus==='Cancelled') { %>selected <% }  %>>Cancelled</option>
+          <% } %>
+        </select>
+      </form>
+      <% } %>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="card">
+      <h5 class="card-header bg-info text-white">Products</h5>
+      <div class="card-body"> 
+        <% order.products.forEach(function(prod,index) { %>
+        <div class="row">
+          <div class="col">
+            <img src="/productImages/<%= prod.product.images[0] %>" alt="cart_Images" class="img-fluid img-thumbnail" style="max-width: 100px; max-height: 100px; width: auto; height: auto;">
+        </div>
+          <div class="col">
+              <h5 class="card-title">Product: <%= prod.product.brand + ' ' + prod.product.name %> </h5>
+              <h5 class="card-title">Quantity:  <%= prod.quantity %></h5>
+              <h5 class="card-title">Unit price:  Rs.<%= prod.salePrice %></h5>
+              <h5 class="card-title">Sub Total: Rs.<%= prod.salePrice * prod.quantity %></h5>
+          </div>
+  
+      </div>
+      <hr>
+      <% }); %>
+    
+      
+        
+      </div>
+    </div>
+        <div class="row order_d_inner mt-5">
+      <div class="col-lg-4">
+        <div class="details_item">
+          <h4>Order Status</h4>
+          <h3 <% if (order.orderStatus === 'Delivered') { %> class="text-success" <% } else if (order.orderStatus === 'Cancelled'){%>class="text-danger"<% } else {%>class="text-primary" <% } %>><%= order.orderStatus %></h3>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="details_item">
+          <h4>Payment Method</h4>
+          <h3><%= order.paymentMethod %></h3>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="details_item">
+          <h4>Grand Total</h4>
+          <h3>  Rs.<%= order.totalAmount %></h3>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row mt-5">
+      
+      <div class="col-lg-6">
+        <a href="/admin/orders" class="btn btn-rounded btn-info">Back to Orders</a>
+      </div>
+    </div>
+  </div>
+</section>
+<br>
+<br><br><br>
+<!--================End Order Details Area =================-->
+
+<script>
+  
+
+</script>
+<%-include('footer')-%>

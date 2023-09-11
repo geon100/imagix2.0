@@ -1,0 +1,53 @@
+<%-include('header')-%>
+
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+  <div class="container">
+    <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+      <div class="col-first">
+        <h1>Confirmation</h1>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End Banner Area -->
+
+<!--================Order Details Area =================-->
+<section class="order_details section_gap">
+  <div class="container">
+    <h3 class="title_confirmation">Thank you. Your order has been received.</h3>
+    <div class="row order_d_inner">
+      <div class="col-lg-4">
+        <div class="details_item">
+          <h4>Order ID</h4>
+          <h3><%= order.orderID %></h3>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="details_item">
+          <h4>Address:</h4>
+          <p><%= order.Address %></p>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="details_item">
+          <h4>Estimated Delivery Date:</h4>
+          <p><%= order.deliveryDate %></p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row mt-5">
+      <div class="col-lg-6">
+        <a href="/products" class="btn btn-rounded btn-primary">Continue Shopping</a>
+      </div>
+      <div class="col-lg-6">
+        <a href="/profile?tab=orders" class="btn btn-rounded btn-success">Go to Order Details</a>
+      </div>
+      
+    </div>
+  </div>
+</section>
+<!--================End Order Details Area =================-->
+
+<%-include('footer')-%>

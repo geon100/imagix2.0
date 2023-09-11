@@ -1,0 +1,667 @@
+<%-include('header')-%>
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+  <div class="container">
+      <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+          <div class="col-first">
+              <h1>User Profile</h1>
+          </div>
+      </div>
+  </div>
+</section>
+<!-- End Banner Area -->
+
+<div class="container">
+  <div class="row">
+      <div class="col-12">
+          <div class="card">
+
+              <div class="card-body">
+                  <div class="card-title mb-4">
+                      <div class="d-flex justify-content-start">
+                          
+                          <div class="userData ml-3">
+                              <h2 class="d-block" style="font-size: 1.5rem; font-weight: bold"><%= user.firstname+' '+user.lastname %></h2>
+                          </div>
+
+                      </div>
+                  </div>
+
+                  <div class="row">
+                      <div class="col-12">
+                          <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
+                              <li class="nav-item">
+                                  <a class="nav-link active" id="basicInfo-tab" data-toggle="tab" href="#basicInfo" role="tab" aria-controls="basicInfo" aria-selected="true">Basic Info</a>
+                              </li>
+                              <li class="nav-item">
+                                  <a class="nav-link" id="address-tab" data-toggle="tab" href="#address" role="tab" aria-controls="address" aria-selected="false">Address</a>
+                              </li>
+                              <li class="nav-item">
+                                <a class="nav-link" id="orders-tab" data-toggle="tab" href="#orders" role="tab" aria-controls="address" aria-selected="false">Orders</a>
+                              </li>
+                          </ul>
+                          <div class="tab-content ml-1" id="myTabContent">
+                              <div class="tab-pane fade show active" id="basicInfo" role="tabpanel" aria-labelledby="basicInfo-tab">
+                              
+                                  <div class="row">
+                                      <div class="col-sm-3 col-md-2 col-5">
+                                          <label style="font-weight:bold;">First Name</label>
+                                      </div>
+                                      <div class="col-md-8 col-6">
+                                          <%= user.firstname %>
+                                      </div>
+                                  </div>
+                                  <hr />
+
+                                  <div class="row">
+                                      <div class="col-sm-3 col-md-2 col-5">
+                                          <label style="font-weight:bold;">Last Name</label>
+                                      </div>
+                                      <div class="col-md-8 col-6">
+                                        <%= user.lastname %>
+                                      </div>
+                                  </div>
+                                  <hr />
+                                  
+                                  
+                                  <div class="row">
+                                      <div class="col-sm-3 col-md-2 col-5">
+                                          <label style="font-weight:bold;">Email</label>
+                                      </div>
+                                      <div class="col-md-8 col-6">
+                                        <%= user.email %>
+                                      </div>
+                                  </div>
+                                  <hr />
+                                  <div class="row">
+                                      <div class="col-sm-3 col-md-2 col-5">
+                                          <label style="font-weight:bold;">Mobile</label>
+                                      </div>
+                                      <div class="col-md-8 col-6">
+                                        <%= user.mobile %>
+                                      </div>
+                                  </div>
+                                  
+                                  <hr />
+                                  <div class="row">
+                                    <a href="#" id="Editbtn" class="btn btn-info" data-toggle="modal" data-target="#editModal">Edit</a>
+
+                                </div>
+                              </div>
+                              <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
+                                <!-- <a href="" class="btn btn-success mb-4">ADD NEW ADDRESS</a> -->
+                                <a href="" class="btn btn-warning btn-rounded mb-4" data-toggle="modal" data-target="#AddressModal" id="editTrigger">ADD NEW ADDRESS</a>
+                                
+                                <% if (user.address.length === 0) { %>
+                                  <h4>No addresses Found</h4>
+                                <% } else { %>
+                                  <% user.address.forEach(function(addr,index) { %>
+                                    <div class="card mb-4" id="addressCard-<%= index %>">
+
+                                      <h5 class="card-header"><%= addr.name %></h5>
+                                      <h1 id="test"></h1>
+                                      <div class="card-body">
+                                        <div class="row">
+                                          <div class="col-sm-3 col-md-2 col-5">
+                                              <label style="font-weight:bold;">Address</label>
+                                          </div>
+                                          <div class="col-md-8 col-6">
+                                            <%= `${addr.fullAddress},${addr.pincode}` %>
+                                          </div>
+                                      </div>
+                                      <hr />
+                                      <div class="row">
+                                        <div class="col-sm-3 col-md-2 col-5">
+                                            <label style="font-weight:bold;">City/district</label>
+                                        </div>
+                                        <div class="col-md-8 col-6">
+                                          <%= `${addr.city},${addr.district}` %>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div class="row">
+                                      <div class="col-sm-3 col-md-2 col-5">
+                                          <label style="font-weight:bold;">Contact Number</label>
+                                      </div>
+                                      <div class="col-md-8 col-6">
+                                        <%= `${addr.mobile}` %>
+                                      </div>
+                                  </div>
+                                  <hr />
+                                  <div class="row">
+                                    <div class="col-sm-3 col-md-2 col-5">
+                                        <label style="font-weight:bold;">Email</label>
+                                    </div>
+                                    <div class="col-md-8 col-6">
+                                      <%= `${addr.email}` %>
+                                    </div>
+                                  </div>
+                                  <hr />
+                                  <div class="row">
+                                    <div class="col-sm-3 col-md-2 col-5">
+                                      <a href="/edit-address?i=<%= index %>" class="btn btn-info">edit</a>
+                                    </div>
+                                    <div class="col-md-8 col-6">
+                                      <form action="/deladdr" id="delAddrForm-<%= index %>" method="post">
+                                        <input type="hidden" name="i" value="<%= index %>">
+                                        <button type="button" class="btn btn-danger" onclick="triggerSweetAlert(<%= index %>)"><span class="ti-trash"></span>Delete</button>
+                                      </form>
+                                    </div>
+                                  </div>
+                                  
+                                
+                                      </div>
+                                    </div>
+                                  
+                                  <% }); %>
+                                <% } %>
+                              </div>
+                              <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="address-tab">
+                                
+                                <% if (orders.length===0) { %>
+                                  <h4>No Orders</h4>
+                                <% } else { %>
+                                  
+                                <table id="myTable" class="table table-striped">
+                                  <thead class="thead-dark">
+                                    <tr>
+                                      <th>Order ID</th>
+                                      <th>Order Date</th>
+                                      <th>Payment Method</th>
+                                      <th>Total Amount</th>
+                                      <th>OrderStatus</th>
+                                      <th><p id="test"></p></th>
+                        
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <% orders.forEach(function(order,index) { %>
+                                    <tr>
+                                      <td><%= order.orderID %></td>
+                                      <td><%= order.orderDate %></td>
+                                      <td><%= order.paymentMethod %></td>
+                                      <td><%= order.totalAmount %></td>
+                                      <% if (order.orderStatus === 'Delivered') { %>
+                                        <td class="text-success"><%= order.orderStatus %></td>
+                                      <% } else if (order.orderStatus === 'Cancelled') { %>
+                                        <td class="text-danger"><%= order.orderStatus %></td>
+                                      <% } else { %>
+                                        <td class="text-primary"><%= order.orderStatus %></td>
+                                      <% } %>
+                                      
+                                      <td><a href="/orderview?id=<%= order._id %>" class="btn btn-info">View</a></td>
+                                      
+                                    </tr>
+                                    <% }); %>
+                                <% } %>
+                                  </tbody>
+                                </table>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+
+
+              </div>
+
+          </div>
+      </div>
+  </div>
+</div>
+
+<div id="AddressModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <% if(addr==='edit') { %> 
+          <h4 class="modal-title">EDIT ADDRESS</h4>
+          <a href="/profile?tab=address" type="button"> cancel</a>
+          <% }else{%> 
+            <h4 class="modal-title">ADD NEW ADDRESS</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            <% } %>
+      </div>
+      <div class="modal-body">
+        <div class="col-lg-8">
+          <form class="row contact_form"  method="post" <% if(addr==='edit') { %> action="/up-address?i=<%= i %>" onsubmit="return editvalidate()" <% }else{%> action="/add-address" onsubmit="return validate()"<% } %>>
+            <% if(addr==='edit') { %> 
+              
+              <div class="col-md-12 form-group p_star">
+                <input type="text" class="form-control" id="name" name="name" placeholder="NAME" value="<%= address.name %>">
+            </div>
+
+            <div class="col-md-12 form-group p_star">
+                <input type="text" class="form-control" id="number" name="number" placeholder="MOBILE" value="<%= address.mobile %>">
+                
+            </div>
+            <div class="col-md-12 form-group p_star">
+                <input type="text" class="form-control" id="email" name="email" placeholder="EMAIL" value="<%= address.email %>">
+            </div>
+              
+              <% }else{%> 
+              <div class="col-md-12 form-group">
+                <label for="toggleInfo">Show Additional Information</label>
+                <input type="checkbox" id="toggleInfo" onchange="toggleInfoFields()">
+            </div>
+            <div id="additionalInfo" style="display: none;">
+              <div class="col-md-12 form-group p_star">
+                  <input type="text" class="form-control" id="fname" name="fname" placeholder="FIRST NAME" value="<%= user.firstname %>">
+              </div>
+              <div class="col-md-12 form-group p_star">
+                  <input type="text" class="form-control" id="lname" name="lname" placeholder="LAST NAME" value="<%= user.lastname %>">
+              </div>
+
+              <div class="col-md-12 form-group p_star">
+                  <input type="text" class="form-control" id="number" name="number" placeholder="MOBILE" value="<%= user.mobile %>">
+                  
+              </div>
+              <div class="col-md-12 form-group p_star">
+                  <input type="text" class="form-control" id="email" name="email" placeholder="EMAIL" value="<%= user.email %>">
+              </div>
+            </div>
+              <% } %>
+              <% if(addr==='edit') { %> 
+              
+              <div class="col-md-12 form-group p_star">
+                <input type="text" class="form-control" id="addr" name="addr" placeholder="ADDRESS LINE " value="<%= address.fullAddress %>">
+            </div>
+              
+              <% }else{%> 
+                
+                <div class="col-md-12 form-group p_star">
+                  <input type="text" class="form-control" id="addr1" name="addr1" placeholder="ADDRESS LINE 1">
+              </div>
+              <div class="col-md-12 form-group p_star">
+                  <input type="text" class="form-control" id="addr2" name="addr2" placeholder="ADDRESS LINE 2">
+                  
+              </div>
+                
+                <% } %>
+              
+              <div class="col-md-6 form-group p_star">
+                <input type="text" class="form-control" id="city" name="city" placeholder="CITY" <% if(addr==='edit') { %> value="<%= address.city %>"  <% } %> >
+            </div>
+            <div class="col-md-6 form-group p_star">
+              <input type="text" class="form-control" id="district" name="district" placeholder="DISTRICT" <% if(addr==='edit') { %> value="<%= address.district %>"  <% } %>>
+          </div>
+              
+              <div class="col-md-12 form-group">
+                  <input type="text" class="form-control" id="pincode" name="pincode" placeholder="PIN CODE" <% if(addr==='edit') { %> value="<%= address.pincode %>"  <% } %>>
+              </div>
+      </div>
+      </div>
+      <div class="modal-footer">
+        <p id="err" class="text-danger font-weight-bold"></p>
+        <% if(addr==='edit') { %> 
+          <button type="submit" class="btn btn-success" >Save</button>
+          <% }else{%> 
+          <button type="submit" class="btn btn-success" >ADD</button>
+         <% } %>
+      </div>
+    </form>
+    </div>
+
+  </div>
+</div>
+
+<!-- Edit Basic Info Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModalLabel">Edit Basic Information</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="editBasicInfoForm" action="/update-basic-info" method="POST" onsubmit="return editinfovalidate()">
+          <!-- First Name -->
+          <div class="form-group">
+            <label for="editFirstName">First Name</label>
+            <input type="text" class="form-control" id="editFirstName" name="editFirstName" value="<%= user.firstname %>" required>
+          </div>
+
+          <!-- Last Name -->
+          <div class="form-group">
+            <label for="editLastName">Last Name</label>
+            <input type="text" class="form-control" id="editLastName" name="editLastName" value="<%= user.lastname %>" required>
+          </div>
+
+          <!-- Email -->
+          <div class="form-group">
+            <label for="editEmail">Email</label>
+            <input type="email" class="form-control" id="editEmail" name="editEmail" value="<%= user.email %>" required>
+          </div>
+
+          <!-- Mobile -->
+          <div class="form-group">
+            <label for="editMobile">Mobile</label>
+            <input type="tel" class="form-control" id="editMobile" name="editMobile" value="<%= user.mobile %>" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+          <p id="errB" class="text-danger font-weight-bold"><% if(locals.errMessage) {%><%- errMessage %><%}%></p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<script>
+  function triggerSweetAlert(index) {
+  Swal.fire({
+    title: 'Are you sure?',
+    icon: 'info',
+    showCancelButton: true,
+    confirmButtonText: 'OK',
+    cancelButtonText: 'Cancel',
+    preConfirm: () => {
+      document.getElementById(`delAddrForm-${index}`).submit()
+    },
+  });
+}
+
+  function validate() {
+        const firstname=document.getElementById('fname')
+        const lastname=document.getElementById('lname')
+        const mobile=document.getElementById('number')
+        const email=document.getElementById('email')
+
+        const addr1=document.getElementById('addr1')
+        const addr2=document.getElementById('addr2')
+        const city=document.getElementById('city')
+        const district=document.getElementById('district')
+        const pincode=document.getElementById('pincode')
+
+        const err=document.getElementById('err')
+
+        const nameRegex=/^[A-Z][a-zA-Z'-]*$/
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+        const mobileRegex = /^[0-9]{10}$/;
+        const emailRegex=/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+
+        if (firstname.value.trim() === '') {
+      err.innerHTML = 'First Name is required'
+      setTimeout(() => {
+         err.innerHTML = ''
+      }, 5000)
+      return false;
+   }
+  
+   if(!nameRegex.test(firstname.value)){
+      err.innerHTML = 'First name not valid'
+      setTimeout(()=>{
+         err.innerHTML = ''
+      },5000)
+      return false;
+   }
+   if (lastname.value.trim() === '') {
+      err.innerHTML = 'Last name is required'
+      setTimeout(() => {
+         err.innerHTML = ''
+      }, 5000)
+      return false;
+   }
+   if(!nameRegex.test(lastname.value)){
+      err.innerHTML = 'Last name not valid'
+      setTimeout(()=>{
+         err.innerHTML = ''
+      },5000)
+      return false;
+   }
+   if (email.value.trim() === '') {
+      err.innerHTML = 'Email is required'
+      setTimeout(() => {
+         err.innerHTML = ''
+      }, 5000)
+      return false;
+   }
+   if (!emailRegex.test(email.value)) {
+      err.innerHTML = "Please enter a valid email"
+      setTimeout(() => {
+         err.innerHTML = ''
+      }, 5000);
+    
+      return false;
+   }
+
+   if (mobile.value.trim() === '') {
+      err.innerHTML = 'Field is required'
+      setTimeout(() => {
+         err.innerHTML = ''
+      }, 5000)
+      return false;
+   }
+
+   if(!mobileRegex.test(mobile.value)){
+      err.innerHTML = 'Please enter a valid number'
+      setTimeout(()=>{
+         err.innerHTML = ''
+      },5000)
+      return false;
+   }
+   if (addr1.value.trim() === '' || addr2.value.trim()===''||city.value.trim() === '' || district.value.trim()===''||pincode.value.trim()==='') {
+      err.innerHTML = 'Address Fields are required'
+      setTimeout(() => {
+         err.innerHTML = ''
+      }, 5000)
+      return false;
+   }
+
+   if (!/^[0-9]{6}$/.test(pincode.value.trim())) {
+    err.innerHTML = 'Pin code should be valid'
+      setTimeout(() => {
+         err.innerHTML = ''
+      }, 5000)
+      return false;
+   }
+  
+   return true;
+    }
+  
+    function toggleInfoFields() {
+        var additionalInfo = document.getElementById("additionalInfo");
+        var checkbox = document.getElementById("toggleInfo");
+
+        if (checkbox.checked) {
+            additionalInfo.style.display = "block";
+            document.getElementById("fname").value = "";
+            document.getElementById("lname").value = "";
+            document.getElementById("number").value = "";
+            document.getElementById("email").value = "";
+        } else {
+            additionalInfo.style.display = "none";
+            document.getElementById("fname").value = "<%= user.firstname%>";
+            document.getElementById("lname").value = "<%= user.lastname%>";
+            document.getElementById("number").value = "<%= user.mobile%>";
+            document.getElementById("email").value = "<%= user.email%>";
+        }
+    }
+   
+
+
+
+window.onload = function () {
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const parameterValue = urlParams.get('tab');
+  console.log(parameterValue); // Add this line
+  if(parameterValue==='orders')
+  document.getElementById('orders-tab').click()
+  else if(parameterValue==='address')
+  document.getElementById('address-tab').click()
+
+  const addr= urlParams.get('addr');
+  if(addr==='edit'){
+    document.getElementById('editTrigger').click()
+  }else if(addr==='BInfo'){
+    document.getElementById('Editbtn').click()
+    document.getElementById('errB').innerHTML='Mail already exist'
+  }
+
+  }
+
+  function editvalidate() {
+        const name=document.getElementById('name')
+        
+        const mobile=document.getElementById('number')
+        const email=document.getElementById('email')
+
+        const addr=document.getElementById('addr')
+        
+        const city=document.getElementById('city')
+        const district=document.getElementById('district')
+        const pincode=document.getElementById('pincode')
+
+        const err=document.getElementById('err')
+
+        const nameRegex=/^[A-Z][a-zA-Z'-]*$/
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+        const mobileRegex = /^[0-9]{10}$/;
+        const emailRegex=/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+
+        if (name.value.trim() === '') {
+      err.innerHTML = ' Name is required'
+      setTimeout(() => {
+         err.innerHTML = ''
+      }, 5000)
+      return false;
+   }
+  
+   
+   
+   
+   if (email.value.trim() === '') {
+      err.innerHTML = 'Email is required'
+      setTimeout(() => {
+         err.innerHTML = ''
+      }, 5000)
+      return false;
+   }
+   if (!emailRegex.test(email.value)) {
+      err.innerHTML = "Please enter a valid email"
+      setTimeout(() => {
+         err.innerHTML = ''
+      }, 5000);
+    
+      return false;
+   }
+
+   if (mobile.value.trim() === '') {
+      err.innerHTML = 'Field is required'
+      setTimeout(() => {
+         err.innerHTML = ''
+      }, 5000)
+      return false;
+   }
+
+   if(!mobileRegex.test(mobile.value)){
+      err.innerHTML = 'Please enter a valid number'
+      setTimeout(()=>{
+         err.innerHTML = ''
+      },5000)
+      return false;
+   }
+   if (addr.value.trim() === '' || city.value.trim() === '' || district.value.trim()===''||pincode.value.trim()==='') {
+      err.innerHTML = 'Address Fields are required'
+      setTimeout(() => {
+         err.innerHTML = ''
+      }, 5000)
+      return false;
+   }
+
+   if (!/^[0-9]{6}$/.test(pincode.value.trim())) {
+    err.innerHTML = 'Pin code should be valid'
+      setTimeout(() => {
+         err.innerHTML = ''
+      }, 5000)
+      return false;
+   }
+  
+   return true;
+    }
+
+function editinfovalidate(){
+        const firstname=document.getElementById('editFirstName')
+        const lastname=document.getElementById('editLastName')
+        const mobile=document.getElementById('editMobile')
+        const email=document.getElementById('editEmail')
+        
+        const nameRegex=/^[A-Z][a-zA-Z'-]*$/
+        const mobileRegex = /^[0-9]{10}$/;
+        const emailRegex=/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+
+        const err=document.getElementById('errB')
+
+
+        if (firstname.value.trim() === '') {
+            err.innerHTML = 'First Name is required'
+            setTimeout(() => {
+               err.innerHTML = ''
+            }, 5000)
+            return false;
+         }
+         if(!nameRegex.test(firstname.value)){
+      err.innerHTML = 'First name not valid'
+      setTimeout(()=>{
+         err.innerHTML = ''
+      },5000)
+      return false;
+   }
+   if (lastname.value.trim() === '') {
+      err.innerHTML = 'Last name is required'
+      setTimeout(() => {
+         err.innerHTML = ''
+      }, 5000)
+      return false;
+   }
+   if(!nameRegex.test(lastname.value)){
+      err.innerHTML = 'Last name not valid'
+      setTimeout(()=>{
+         err.innerHTML = ''
+      },5000)
+      return false;
+   }
+   if (email.value.trim() === '') {
+      err.innerHTML = 'Email is required'
+      setTimeout(() => {
+         err.innerHTML = ''
+      }, 5000)
+      return false;
+   }
+   if (!emailRegex.test(email.value)) {
+      err.innerHTML = "Please enter a valid email"
+      setTimeout(() => {
+         err.innerHTML = ''
+      }, 5000);
+    
+      return false;
+   }
+
+   if (mobile.value.trim() === '') {
+      err.innerHTML = 'Field is required'
+      setTimeout(() => {
+         err.innerHTML = ''
+      }, 5000)
+      return false;
+   }
+
+   if(!mobileRegex.test(mobile.value)){
+      err.innerHTML = 'Please enter a valid number'
+      setTimeout(()=>{
+         err.innerHTML = ''
+      },5000)
+      return false;
+   }
+
+   return true
+      
+}
+</script>
+
+<%-include('footer')-%>

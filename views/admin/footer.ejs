@@ -23,7 +23,18 @@
 <script src="assets/js/main.js" type="text/javascript"></script>
 <script src="assets/js/custom-chart.js" type="text/javascript"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
+	<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+        $(document).ready(function() {
+$('#myTable').DataTable({
+    
+    "order": [[1, "desc"]],
+    "dom": '<"top"lf>rt<"bottom"ip>',
+"bLengthChange": false});
+});
+    </script>
 </body>
 
 

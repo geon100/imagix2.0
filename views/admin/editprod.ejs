@@ -68,7 +68,11 @@
                             <input  type="text" class="form-control" name="sprice" id="sprice" value="<%- prod.salePrice %>">
                         </div>
                       </div>
-                    
+                    <div id="imagesPreviewContainer">
+                      <% for(let i = 0; i < prod.images.length; i++) { %>
+                      <img src="/productImages/<%= prod.images[i] %>" id="imgView<%= i+1 %>" alt="product image" width="100px" height="100px">
+                      <% } %>
+                    </div>
                       <div class="card mb-4">
                         <div class="card-header">
                             <h4>Images</h4>
@@ -76,7 +80,7 @@
                         <div class="card-body">
                             <div class="input-upload">
                                 <img src="assets/imgs/theme/upload.svg" alt="">
-                                <input class="form-control" type="file" multiple name="images" id="images" accept=".jpg, .jpeg, .png">
+                                <input class="form-control" type="file" multiple name="images" id="images" accept=".jpg, .jpeg, .png" onchange="viewImages(event)">
                             </div>
                         </div>
                         <div class="card-body">
@@ -145,13 +149,7 @@
       }, 5000);
       return false;
     }
-    if(images.files.length>0 && images.files.length<3){
-      errMessage.textContent = 'There should be atleast 3 images.'; 
-      setTimeout(() => {
-        errMessage.textContent = ''; 
-      }, 5000);
-      return false;
-    }
+    
     if(images.files.length>3){
       errMessage.textContent = 'Only 3 images allowed.'; 
       setTimeout(() => {
@@ -167,6 +165,35 @@
       errMessage.textContent='';
     }, 5000);
   }
+  function viewImages(event) {
+            const files = event.target.files;
+            const imagesPreviewContainer = document.getElementById("imagesPreviewContainer");
+
+            // Clear the existing previews
+            imagesPreviewContainer.innerHTML = '';
+
+            if (files.length > 3) {
+              errMessage.textContent = 'Only 3 images allowed.'; 
+                  setTimeout(() => {
+                  errMessage.textContent = ''; 
+                  }, 5000);
+                event.target.value = '';  // Clear the input
+                return;
+            }
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+
+
+                // Display image preview
+                const imgPreview = document.createElement('img');
+                imgPreview.src = URL.createObjectURL(file);
+                imgPreview.width = 100;
+                imgPreview.height = 100;
+                imgPreview.id = "imgView" + (i+1); // For example, imgView1, imgView2, etc.
+                imagesPreviewContainer.appendChild(imgPreview);
+            }
+        }
 </script>
 
 <%-include('footer')-%>

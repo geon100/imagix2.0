@@ -1,5 +1,11 @@
 <%-include('header')-%>
-
+<style>
+  .prd-bottom button{
+    border-radius: 10px;
+    border: none;
+  }
+  
+</style>
 <!-- Start Banner Area -->
 <section class="banner-area organic-breadcrumb">
   <div class="container">
@@ -15,51 +21,63 @@
   <div class="row">
     <div class="col-xl-3 col-lg-4 col-md-5">
       <div class="sidebar-categories">
-        <div class="head">Browse Categories</div>
-        <ul class="main-categories">
-          <% cat.forEach(function(cat, index) { %>
-          <li class="main-nav-list"><a data-toggle="collapse" href="#" aria-expanded="false" aria-controls="fruitsVegetable"><span
-               class="lnr lnr-arrow-right"></span><%= cat.name %></a>
-          </li>
-          <% }); %>
-        </ul>
+      
+    
       </div>
+      
       <div class="sidebar-filter mt-50">
         <div class="top-filter-head">Product Filters</div>
         <div class="common-filter">
-          <div class="head">Brands</div>
-          <form action="#">
-            <ul>
-              <% brand.forEach(function(brand, index) { %>
-              <li class="filter-list"><input class="pixel-radio" type="radio" id="<%= brand %>" name="brand"><label for="<%= brand %>"><%= brand %></label></li>
+          <form action="/products" method="get">
+          <div class="head">Category</div>
+            <select id="category" class="form-select" name="category">
+              <option value="">All Categories</option>
+              <% cat.forEach(function(cat) { %>
+                <option value="<%= cat._id %>" <% if(cat._id.toString() === categoryFilter) { %>selected<% } %>><%= cat.name %></option>
               <% }); %>
-            </ul>
-          </form>
+            </select>
+          
         </div>
-
+        <div class="common-filter">
+          <div class="head">Brands</div>
+          <select id="brand" name="brand" class="form-select">
+            <option value="">All Brands</option>
+            <% brand.forEach(function(brand) { %>
+              <option value="<%= brand %>" <% if(brand === brandFilter) { %>selected<% } %>><%= brand %></option>
+            <% }); %>
+          </select>
+        </div>
+        <div><button type="submit" class="btn btn-warning mt-4">Apply Filters</button></div>
       </div>
+    </form>
     </div>
     <div class="col-xl-9 col-lg-8 col-md-7">
       <!-- Start Filter Bar -->
       <div class="filter-bar d-flex justify-content-between align-items-center">
         <div class="sorting">
-          <select>
-            <option value="1">Default sorting</option>
-            <option value="1">Default sorting</option>
-            <option value="1">Default sorting</option>
-          </select>
+          <form method="get" action="/products">
+            <input type="hidden" name="category" value="<%= categoryFilter %>">
+            <input type="hidden" name="brand" value="<%= brandFilter %>">
+            <select onchange="this.form.submit()" name="sort">
+              <option value="0">Sort by</option>
+              <option value="1" <% if (sort === 1) { %>selected<% } %>>Price: Low to High</option>
+              <option value="-1" <% if (sort === -1) { %>selected<% } %>>Price: High to Low</option>
+              <option value="2" <% if (sort === 2) { %>selected<% } %>>Brand: A-Z</option>
+            </select>
+          </form>
+          
         </div>
         
         <div class="pagination">
           <% if (cp > 1) { %>
-            <a href="/products?page=<%= cp - 1 %>" class="prev-arrow"><i class="fa fa-long-arrow-left" aria-hidden="true"></i></a>
+            <a href="/products?page=<%= cp - 1 %>&sort=<%= sort %>&category=<%= categoryFilter %>&brand=<%= brandFilter %>" class="prev-arrow"><i class="fa fa-long-arrow-left" aria-hidden="true"></i></a>
           <% } %>
           
 
           <a href="javascript:void(0)" class="active" ><%= cp %></a>
 
-          <% if (prods.length === 6 && remain!=0) { %>
-            <a href="/products?page=<%= cp + 1 %>" class="next-arrow"><i class="fa fa-long-arrow-right" aria-hidden="true"></i></a>
+          <% if (remain>0) { %>
+            <a href="/products?page=<%= cp + 1 %>&sort=<%= sort %>&category=<%= categoryFilter %>&brand=<%= brandFilter %>" class="next-arrow"><i class="fa fa-long-arrow-right" aria-hidden="true"></i></a>
           <% } %>
           
         </div>
@@ -71,6 +89,11 @@
       <section class="lattest-product-area pb-40 category-list">
         <div class="row">
           <!-- single product -->
+          <% if(prods.length===0) { %>
+            <div class="d-flex justify-content-center align-items-center " style="min-height: 30vh;min-width: 30vh;">
+              <h2 class="text-warning">No Products</h2>
+            </div>
+          <%} else{ %>
           <% prods.forEach(function(prod, index) { %>
             
           <div class="col-lg-4 col-md-6">
@@ -83,28 +106,21 @@
                     <h6 class="l-through">Rs. <%= prod.regularPrice %></h6>
                   </div>
                   <div class="prd-bottom">
-                    
-                    <a href="" class="social-info">
-                      <span class="ti-bag"></span>
-                      <p class="hover-text">add to bag</p>
-                    </a>
-                    <a href="" class="social-info">
-                      <span class="lnr lnr-heart"></span>
-                      <p class="hover-text">Wishlist</p>
-                  </a>
-                  <a href="" class="social-info">
-                    <span class="lnr lnr-sync"></span>
-                    <p class="hover-text">compare</p>
-                  </a>
-                  <a href="/productdetails?id=<%= prod._id %>" class="social-info">
+                    <form action="/addToCart" method="post" style="display: inline;">
+                    <input type="hidden" value="<%= prod._id %>" name="id">
+                    <button class="btn-danger btn-rounded" >Add to cart</button>
+                  </form>
+                    <button class="btn-primary btn-rounded"><a href="/productdetails?id=<%= prod._id %>" style="text-decoration: none;color: white;">View More</a></button>
+                  <!-- <a href="/productdetails?id=<%= prod._id %>" class="social-info">
                     <span class="lnr lnr-move"></span>
                     <p class="hover-text">view more</p>
-                  </a>
+                  </a> -->
                 </div>
               </div>
             </div>
           </div>
           <% }); %>
+          <% } %>
         </div>
       </section>
       <!-- End Best Seller -->

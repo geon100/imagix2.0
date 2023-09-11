@@ -33,7 +33,17 @@ const isLogout = async(req,res,next)=>{
   }
 }
 
+const checkCart = async(req,res,next)=>{
+   const user=await User.findById(req.session.user._id)
+
+   if(user.cart.length===0){
+      res.redirect('/cart')
+      }else{
+         next()
+      }
+}
 module.exports = {
   isLogin,
-  isLogout
+  isLogout,
+  checkCart
 }

@@ -6,7 +6,7 @@ module.exports={
     for(let i=0;i<req.files.length;i++){
       const inputFilePath=req.files[i].path;
     
-      sharp(inputFilePath).resize(150,150,{
+      sharp(inputFilePath).resize(1000,1000,{
         kernel:sharp.kernel.nearest,
         fit:'fill',
         position:'right top',

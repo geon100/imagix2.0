@@ -38,10 +38,10 @@
 						<h3>Log in to enter</h3>
 						<form class="row login_form" action="/login" method="post" id="contactForm" onsubmit="return validateForm()">
 							<div class="col-md-12 form-group">
-								<input type="text" class="form-control" id="username" name="username" placeholder="Username" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Username'">
+								<input type="text" class="form-control" id="username" name="username" placeholder="Username" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Username'" value="geobabu078@gmail.com">
 							</div>
 							<div class="col-md-12 form-group" id="password-field">
-								<input type="password" class="form-control" id="password" name="password" placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'">
+								<input type="password" class="form-control" id="password" name="password" placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'" value="Binta@777">
 							</div>
 							<div class="col-md-12 form-group">
 								<div class="creat_account">
@@ -52,6 +52,7 @@
 							<div class="col-md-12 form-group">
 								<button type="submit" value="submit" class="primary-btn" id="login-button">Log In</button>
 								<button type="submit" class="primary-btn" id="send-otp-button" style="display:none;">Send OTP</button>
+								<a href="/forgot-password">Forgot Password?</a>
 								<p id="err" class="text-danger font-weight-bold"><%-errMessage-%></p>
                 <p class="text-success font-weight-bold"><%-message-%></p>
 							</div>
