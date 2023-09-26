@@ -1,5 +1,5 @@
 <%-include('header')-%>
-
+<% if(order){ %>
 <!-- Start Banner Area -->
 <section class="banner-area organic-breadcrumb">
   <div class="container">
@@ -32,7 +32,7 @@
       <div class="col-lg-4">
         <div class="details_item">
           <h4>Estimated Delivery Date:</h4>
-          <p><%= order.deliveryDate %></p>
+          <p><%= order.deliveryDate.toDateString() %></p>
         </div>
       </div>
     </div>
@@ -49,5 +49,10 @@
   </div>
 </section>
 <!--================End Order Details Area =================-->
+<%} else { %>
 
+  <h1 class="text-danger">Order Failed!!</h1>
+  <p class="text-info">please try again</p>
+  <a href="/" class="btn btn-rounded btn-danger">Shop</a>
+  <% } %>
 <%-include('footer')-%>

@@ -4,13 +4,14 @@ const session = require('express-session');
 const nocache = require('nocache')
 const logger = require('morgan')
 
-const upload=require('../middlewares/multer')
+const {upload,banner}=require('../middlewares/multer')
 const {isLogin,isLogout} = require('../middlewares/adminAuth')
 const {loadLogin,verfiyUser,adminLogout,loadhome,loadUser,blockUser}=require('../controller/adminController');
 const {loadPro,addproView,addPro,prodel,editprod,upProd,prosearch}=require('../controller/productcontroller')
 const {loadCat,addCat,blockCat,loadEdit,upCat}=require('../controller/categorycontroller')
-const {ordersLoad,ordersChange,singleOrder}=require('../controller/orderController')
-
+const {ordersLoad,ordersChange,singleOrder,returnApprove,reportload}=require('../controller/orderController')
+const {couponLoad,generateCode,addcoupon,changeCouponStatus}=require('../controller/couponcontroller')
+const {bannerList,addBanner,changeBannerStatus}=require('../controller/bannercontroller')
 router.use(nocache())
 router.use(session({
   secret: 'adminSecret',  
@@ -51,7 +52,20 @@ router.post('/search',isLogin,prosearch)
 router.get('/orders',isLogin,ordersLoad)
 router.get('/orderview',isLogin,singleOrder)
 router.post('/changeStatus',isLogin,ordersChange)
+router.post('/returnStatus',isLogin,returnApprove)
+//report
+router.get('/report',isLogin,reportload)
 
 
+//coupons
+router.get('/coupons',isLogin,couponLoad)
+router.get('/generateCode',isLogin,generateCode)
+router.post('/addcoupon',isLogin,addcoupon)
+router.patch('/changeCouponStatus',isLogin,changeCouponStatus)
+
+//banner
+router.get('/banners',isLogin,bannerList)
+router.post('/addBanner',isLogin,banner.single('banner'),addBanner)
+router.patch('/changeBannerStatus',isLogin,changeBannerStatus)
 
 module.exports=router

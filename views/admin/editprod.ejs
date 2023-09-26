@@ -70,7 +70,10 @@
                       </div>
                     <div id="imagesPreviewContainer">
                       <% for(let i = 0; i < prod.images.length; i++) { %>
-                      <img src="/productImages/<%= prod.images[i] %>" id="imgView<%= i+1 %>" alt="product image" width="100px" height="100px">
+                      <div >
+                        <img src="/productImages/<%= prod.images[i] %>" id="imgView<%= i+1 %>" alt="product image" width="100px" height="100px">
+                      <button type="button" id="delbtn<%= i+1 %>" class="btn btn-danger" onclick="delImg('<%= prod.images[i] %>',<%= i%>)"><i class="material-icons md-delete_forever"></i></button>
+                      </div>
                       <% } %>
                     </div>
                       <div class="card mb-4">
@@ -87,6 +90,7 @@
                           <button type="submit" class="btn btn-primary btn-sm rounded">Update Product</button>
                           <p id="err" class="text-danger font-weight-bold"><%-errmessage-%></p>
                       </div>
+                      <input type="hidden" name="deletedImages" id="deletedImages">
                     </div> <!-- card end// -->
                   </form>
               </div>
@@ -98,6 +102,23 @@
 </section> <!-- content-main end// -->
 
 <script>
+  const delImgs=[]
+  function delImg(img,i) {
+    if(delImgs.length===<%- prod.images.length-1 %>){
+      Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: `Atleast One image should be present`
+        });
+        return
+    }
+    const image=document.getElementById(`imgView${i+1}`)
+    image.style.display = 'none';
+    document.getElementById(`delbtn${i+1}`).style.display='none'
+    delImgs.push(img)
+    document.getElementById('deletedImages').value=delImgs
+    // console.log(delImgs)
+  }
   
   const errMessage = document.getElementById('err');
   const green = document.getElementById('green');

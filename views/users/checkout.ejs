@@ -1,87 +1,143 @@
 <%-include('header')-%>
 
-<!-- Start Banner Area -->
-<section class="banner-area organic-breadcrumb">
-  <div class="container">
-      <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
-          <div class="col-first">
-              <h1>CHECKOUT</h1>
-          </div>
-      </div>
-  </div>
-</section>
-<!-- End Banner Area -->
+    <!-- Start Banner Area -->
+    <section class="banner-area organic-breadcrumb">
+        <div class="container">
+            <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+                <div class="col-first">
+                    <h1>CHECKOUT</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Banner Area -->
 
-<!--================Checkout Area =================-->
-<section class="checkout_area section_gap">
-  <div class="container">
-      <div class="billing_details">
-          <div class="row">
-            <div class="col-lg-8">
-              <a href="" class="btn btn-warning btn-rounded mb-4" data-toggle="modal" data-target="#AddressModal">ADD NEW ADDRESS</a>
-              <% if (user.address.length === 0) { %>
-                  <h1>No address</h1>
-              <% } else { %>
-                  <h5>Choose an address:</h5>
-                  <form action="/placeorder" method="post">
-                      <% user.address.forEach(function(addr, index) { %>
-                          <div class="card mb-4">
-                              <div class="card-header">
-                                  <label>
-                                      <input type="radio" name="selectedAddress" value="<%= addr.name %>,<%= `${addr.fullAddress}, ${addr.pincode}, ${addr.city}, ${addr.district}` %>,<%= `${addr.mobile}` %>,<%= `${addr.email}` %>" <% if (index === 0) { %>checked<% } %>>
-                                      <%= addr.name %>
-                                  </label>
-                              </div>
-                              <div class="card-body">
-                                  <div class="row">
-                                      <div class="col-sm-3 col-md-2 col-5">
-                                          <label style="font-weight:bold;">Address</label>
-                                      </div>
-                                      <div class="col-md-8 col-6">
-                                          <%= `${addr.fullAddress}, ${addr.pincode}, ${addr.city}, ${addr.district}` %>
-                                      </div>
-                                  </div>
-                                  <hr />
-                                  <div class="row">
-                                      <div class="col-sm-3 col-md-2 col-5">
-                                          <label style="font-weight:bold;">Mobile</label>
-                                      </div>
-                                      <div class="col-md-8 col-6">
-                                          <label><%= `${addr.mobile}` %></label>
-                                      </div>
-                                  </div>
-                                  <hr />
-                                  <div class="row">
-                                      <div class="col-sm-3 col-md-2 col-5">
-                                          <label style="font-weight:bold;">Email</label>
-                                      </div>
-                                      <div class="col-md-8 col-6">
-                                          <%= `${addr.email}` %>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-                      <% }); %>
-                  
-              <% } %>
-          </div>
-          
-              <div class="col-lg-4">
-                  <div class="order_box">
-                      <h2>Your Order</h2>
-                      <ul class="list">
-                        
-                          
-                          <li><a href="#">Product<span>Total</span></a></li>
-                          <% prods.forEach(function(prod, index) { %>
-                            <li><a href="#"><%= prod.brand+' '+prod.name %> <span class="middle">x <%= prod.quantity %></span> <span class="last" >Rs. <%= prod.quantity*prod.salePrice %></span></li>
+    <!--================Checkout Area =================-->
+    <section class="checkout_area section_gap">
+        <form id="checkoutform">
+        <div class="container">
+            <div class="billing_details">
+                
+                    
+                    
+                <div class="row">
+                    <div class="col-lg-8">
+                        <a href="" class="btn btn-warning btn-rounded mb-4" data-toggle="modal"
+                            data-target="#AddressModal">ADD NEW ADDRESS</a>
+                        <% if (user.address.length===0) { %>
+                            <h1>No address</h1>
+                            <% } else { %>
+                                <h5>Choose an address:</h5>
+                                    <% user.address.forEach(function(addr, index) { %>
+                                        <div class="card mb-4">
+                                            <div class="card-header">
+                                                <label>
+                                                    <input type="radio" name="selectedAddress"
+                                                        value="<%= addr.name %>,<%= `${addr.fullAddress}, ${addr.pincode}, ${addr.city}, ${addr.district}` %>,<%= `${addr.mobile}` %>,<%= `${addr.email}` %>"
+                                                        <% if (index===0) { %>checked<% } %>>
+                                                        <%= addr.name %>
+                                                        
+                                                </label>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-sm-3 col-md-2 col-5">
+                                                        <label style="font-weight:bold;">Address</label>
+                                                    </div>
+                                                    <div class="col-md-8 col-6">
+                                                        <%= `${addr.fullAddress}, ${addr.pincode}, ${addr.city},
+                                                            ${addr.district}` %>
+                                                    </div>
+                                                </div>
+                                                <hr />
+                                                <div class="row">
+                                                    <div class="col-sm-3 col-md-2 col-5">
+                                                        <label style="font-weight:bold;">Mobile</label>
+                                                    </div>
+                                                    <div class="col-md-8 col-6">
+                                                        <label>
+                                                            <%= `${addr.mobile}` %>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <hr />
+                                                <div class="row">
+                                                    <div class="col-sm-3 col-md-2 col-5">
+                                                        <label style="font-weight:bold;">Email</label>
+                                                    </div>
+                                                    <div class="col-md-8 col-6">
+                                                        <%= `${addr.email}` %>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <% }); %>
+
+                                            <% } %>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <div class="order_box">
+                            <h2>Your Order</h2>
+                            <ul class="list">
+
+
+                                <li><a href="#">Product<span>Total</span></a></li>
+                                <% prods.forEach(function(prod, index) { %>
+                                    <li><a href="#">
+                                            <%= prod.brand+' '+prod.name %> <span class="middle">x <%= prod.quantity %></span> <span class="last" >Rs. <%= prod.quantity*prod.salePrice %></span></li>
                           <% }); %>
                       </ul>
-                      <ul class="list list_2">
-                          <li><a href="#" >Total <span id="total">Rs. <%= gTotal %></span></a></li>
-                          <input type="hidden" value="<%= gTotal %>" name="total">
-                      </ul>
                       
+                      
+                      <% if(discount) {%>
+                        
+                        <ul class="list list_2">
+                            <li><a href="#" >Discount <span id="discount">Rs. <%= discount %></span></a></li>
+                            <input type="hidden" value="<%= discount %>" name="discount">
+                        </ul>
+                        <ul class="list list_2">
+                            <li><a href="#" >Total <span id="total">Rs. <%= gTotal %></span></a></li>
+                            <input type="hidden" value="<%= gTotal %>" name="total" id="gTotal">
+                        </ul>
+                        <h6>coupon applied</h6>
+                        <div class="payment_item">
+                            <p class="text-success font-weight-bold"><%= coupons.code %> <br> <span class="text-dark"><%= coupons.discountPercent %> % off upto <%= coupons.maxDiscount %></span> <br> <a href="/checkout" class="btn">&#10006;</a></p>
+                            <input type="hidden" name="appliedCoupon" value="<%= coupons._id %>">
+                        </div>
+                        
+                        <% } else { %>
+                            <ul class="list list_2">
+                                <li><a href="#" >Total <span id="total">Rs. <%= gTotal %></span></a></li>
+                                <input type="hidden" value="<%= gTotal %>" name="total" id="gTotal">
+                            </ul>
+                      <div class="couponapply">
+                        <div class="dropdown">
+                            <button class="btn btn-warning dropdown-toggle" type="button" id="couponDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Apply Coupon
+                            </button>
+                            
+                            <div class="dropdown-menu dropdown-menu-bottom" aria-labelledby="couponDropdown">
+                                <% coupons.forEach(function(coupon, index) { %>
+                                <div class="dropdown-item">
+                                    <button type="button" class="btn btn-info" onclick="couponApply(<%= index %>)">
+                                        
+                                        
+                                        <input type="hidden" id="couMin-<%= index %>" name="couMin" value="<%= coupon.minPurchase %>">
+                                        <input type="hidden" id="cou-<%= index %>" name="couponid" value="<%= coupon._id %>">
+                                        <div class="mr-3 wrap-icon"></div>
+                                        <div>
+                                            <h3><%= coupon.code %></h3>
+                                            <p class="font-weight-bold"><%= coupon.description %></p>
+                                            <p class="font-weight-bold"><%= coupon.discountPercent %> % off upto Rs.<%= coupon.maxDiscount %></p>
+                                        </div>
+                                    </button>
+                                </div>
+                                <% }); %>
+                            </div>
+                        </div>
+                    </div>
+                    <%}%>
                       <div class="payment_item">
                           <div class="radion_btn">
                               <input type="radio" id="f-option5" name="payment" value="COD" checked>
@@ -90,6 +146,16 @@
                           </div>
                           <p>You can make payment when you receive the product</p>
                       </div>
+                      <div class="payment_item">
+                        <div class="radion_btn">
+                            <input type="radio" id="f-option7" name="payment" value="Wallet">
+                            <label for="f-option7">Wallet</label>
+                            <div class="check"></div>
+                        </div>
+                        <p>Pay From your in-app Wallet. <br> <span>Wallet Balance : Rs.<span class="text-success font-weight-bold "><%= user.Wallet %></span></span> </p>
+                        <input type="hidden" name="walletBalance" id="walletBalance" value="<%= user.Wallet %>">
+                        
+                    </div>
                       <div class="payment_item active">
                           <div class="radion_btn">
                               <input type="radio" id="f-option6" name="payment" value="online">
@@ -97,8 +163,7 @@
                               <img src="img/product/card.jpg" alt="">
                               <div class="check"></div>
                           </div>
-                          <p>Pay via PayPal; you can pay with your credit card if you don’t have a PayPal
-                              account.</p>
+                          <p>Pay Online via Razorpay</p>
                       </div>
                       <!-- <div class="creat_account">
                           <input type="checkbox" id="f-option4" name="selector">
@@ -106,12 +171,12 @@
                           <a href="#">terms & conditions*</a>
                       </div> -->
                       <button class="primary-btn">Place Order</button>
-                    </form>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
 </section>
 <!--================End Checkout Area =================-->
 <div id="AddressModal" class="modal fade" role="dialog">
@@ -175,106 +240,106 @@
 
   </div>
 </div>
-
+<%-include('footer')-%>
 <script>
-  function validate() {
-        const firstname=document.getElementById('fname')
-        const lastname=document.getElementById('lname')
-        const mobile=document.getElementById('number')
-        const email=document.getElementById('email')
 
-        const addr1=document.getElementById('addr1')
-        const addr2=document.getElementById('addr2')
-        const city=document.getElementById('city')
-        const district=document.getElementById('district')
-        const pincode=document.getElementById('pincode')
+    function validate() {
+        const firstname = document.getElementById('fname') 
+        const lastname = document.getElementById('lname') 
+        const mobile = document.getElementById('number') 
+        const email = document.getElementById('email') 
+        const addr1 = document.getElementById('addr1') 
+        const addr2 = document.getElementById('addr2') 
+        const city = document.getElementById('city') 
+        const district = document.getElementById('district') 
+        const pincode = document.getElementById('pincode') 
+        const err = document.getElementById('err') 
+         const nameRegex = /^[A-Z][a-zA-Z'-]*$/
+         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/; 
+         const mobileRegex = /^[0-9]{10}$/; 
+         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/ 
+        
+        if(firstname.value.trim() === '') {
+                err.innerHTML = 'First Name is required'
+            setTimeout(() => {
+                err.innerHTML = ''
+            }, 5000)
+            return false;
+        }
 
-        const err=document.getElementById('err')
+        if (!nameRegex.test(firstname.value)) {
+            err.innerHTML = 'First name not valid'
+            setTimeout(() => {
+                err.innerHTML = ''
+            }, 5000)
+            return false;
+        }
+        if (lastname.value.trim() === '') {
+            err.innerHTML = 'Last name is required'
+            setTimeout(() => {
+                err.innerHTML = ''
+            }, 5000)
+            return false;
+        }
+        if (!nameRegex.test(lastname.value)) {
+            err.innerHTML = 'Last name not valid'
+            setTimeout(() => {
+                err.innerHTML = ''
+            }, 5000)
+            return false;
+        }
+        if (email.value.trim() === '') {
+            err.innerHTML = 'Email is required'
+            setTimeout(() => {
+                err.innerHTML = ''
+            }, 5000)
+            return false;
+        }
+        if (!emailRegex.test(email.value)) {
+            err.innerHTML = "Please enter a valid email"
+            setTimeout(() => {
+                err.innerHTML = ''
+            }, 5000);
 
-        const nameRegex=/^[A-Z][a-zA-Z'-]*$/
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
-        const mobileRegex = /^[0-9]{10}$/;
-        const emailRegex=/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+            return false;
+        }
 
-        if (firstname.value.trim() === '') {
-      err.innerHTML = 'First Name is required'
-      setTimeout(() => {
-         err.innerHTML = ''
-      }, 5000)
-      return false;
-   }
-  
-   if(!nameRegex.test(firstname.value)){
-      err.innerHTML = 'First name not valid'
-      setTimeout(()=>{
-         err.innerHTML = ''
-      },5000)
-      return false;
-   }
-   if (lastname.value.trim() === '') {
-      err.innerHTML = 'Last name is required'
-      setTimeout(() => {
-         err.innerHTML = ''
-      }, 5000)
-      return false;
-   }
-   if(!nameRegex.test(lastname.value)){
-      err.innerHTML = 'Last name not valid'
-      setTimeout(()=>{
-         err.innerHTML = ''
-      },5000)
-      return false;
-   }
-   if (email.value.trim() === '') {
-      err.innerHTML = 'Email is required'
-      setTimeout(() => {
-         err.innerHTML = ''
-      }, 5000)
-      return false;
-   }
-   if (!emailRegex.test(email.value)) {
-      err.innerHTML = "Please enter a valid email"
-      setTimeout(() => {
-         err.innerHTML = ''
-      }, 5000);
-    
-      return false;
-   }
+        if (mobile.value.trim() === '') {
+            err.innerHTML = 'Field is required'
+            setTimeout(() => {
+                err.innerHTML = ''
+            }, 5000)
+            return false;
+        }
 
-   if (mobile.value.trim() === '') {
-      err.innerHTML = 'Field is required'
-      setTimeout(() => {
-         err.innerHTML = ''
-      }, 5000)
-      return false;
-   }
+        if (!mobileRegex.test(mobile.value)) {
+            err.innerHTML = 'Please enter a valid number'
+            setTimeout(() => {
+                err.innerHTML = ''
+            }, 5000)
+            return false;
+        }
+        if (addr1.value.trim() === '' ||
+            addr2.value.trim() === '' || city.value.trim() === '' ||
+            district.value.trim() === '' || pincode.value.trim() === '') {
+            err.innerHTML = 'Address Fields are required'
+            setTimeout(() => {
+                err.innerHTML = ''
+            }, 5000)
+            return false;
+        }
 
-   if(!mobileRegex.test(mobile.value)){
-      err.innerHTML = 'Please enter a valid number'
-      setTimeout(()=>{
-         err.innerHTML = ''
-      },5000)
-      return false;
-   }
-   if (addr1.value.trim() === '' || addr2.value.trim()===''||city.value.trim() === '' || district.value.trim()===''||pincode.value.trim()==='') {
-      err.innerHTML = 'Address Fields are required'
-      setTimeout(() => {
-         err.innerHTML = ''
-      }, 5000)
-      return false;
-   }
-
-   if (!/^[0-9]{6}$/.test(pincode.value.trim())) {
-    err.innerHTML = 'Pin code should be valid'
-      setTimeout(() => {
-         err.innerHTML = ''
-      }, 5000)
-      return false;
-   }
-  
-   return true;
+        if (!/^[0-9]{6}$/.test(pincode.value.trim())) {
+            err.innerHTML = 'Pin code should be valid'
+            setTimeout(() => {
+                err.innerHTML = ''
+            }, 5000)
+            return false;
+        }
+        
+        return true;
     }
-  
+
     function toggleInfoFields() {
         var additionalInfo = document.getElementById("additionalInfo");
         var checkbox = document.getElementById("toggleInfo");
@@ -294,5 +359,115 @@
         }
     }
     
+    $('#checkoutform').submit((e) => {
+    e.preventDefault();
+    const formdata = $('#checkoutform').serialize();
+    const paymentMethod = $("input[name='payment']:checked").val(); 
+
+    if (paymentMethod === 'Wallet') {
+        const totalAmount = parseFloat($("#total").text().replace("Rs. ", ""));
+        const walletBalance = document.getElementById('walletBalance').value;
+        console.log("total:"+totalAmount)
+        console.log("total:"+walletBalance)
+        if (walletBalance < totalAmount) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Insufficient Wallet Balance',
+                text: 'Please choose another payment method.'
+            });
+            return;
+        }
+    }
+    const fieldValue = <%- user.address.length %>;
+    
+    if(!fieldValue){
+        Swal.fire({
+                icon: 'error',
+                title: 'No Adrress added',
+                text: 'Please add and select an Address.'
+            });
+            return;
+    }
+
+    $.ajax({
+        url: '/placeorder',
+        method: 'post',
+        data: formdata,
+        success: (response) => {
+            if (response.codSuccess) {
+                window.location.href = `/ordersuccess?id=${response.id}`;
+            } else {
+                razorpayPayment(response);
+            }
+        }
+    });
+});
+
+    function razorpayPayment(order){
+        var options = {
+    "key": 'rzp_test_oyuTcEw6xvrLWU', // Enter the Key ID generated from the Dashboard
+    "amount": order.amount*100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+    "currency": "INR",
+    "name": "Acme Corp",
+    "description": "Test Transaction",
+    "image": "https://example.com/your_logo",
+    "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+    "handler": function (response){
+        
+        verifypayment(order,response)
+    },
+    // "prefill": {
+    //     "name": res.user.firstname+' '+res.user.lastname,
+    //     "email": res.user.email,
+    //     "contact": res.user.mobile
+    // },
+    "notes": {
+        "address": "Razorpay Corporate Office"
+    },
+    "theme": {
+        "color": "#3399cc"
+    }
+};
+var rzp1 = new Razorpay(options);
+rzp1.open()
+    }
+
+function verifypayment(order,payment) {
+    $.ajax({
+            url: '/verifypayment',
+            method: 'post',
+            data: {order,payment},
+            success:(response)=>{
+                if (response.status) {
+                    window.location.href = `/ordersuccess?id=${response.id}`
+                }else{
+                    window.location.href='/ordersuccess'
+                }
+            }  
+        })
+}
+function couponApply(index) {
+    const id = document.getElementById(`cou-${index}`).value;
+    const min = document.getElementById(`couMin-${index}`).value;
+    const total = document.getElementById('gTotal').value;
+
+    if (BigInt(total) < BigInt(min)) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: `Cannot apply coupon. Minimum purchase requirement is Rs. ${min}`
+        });
+    } else {
+        Swal.fire({
+            icon: 'success',
+            title: 'Coupon Applied',
+            showConfirmButton: false,
+            timer: 1500
+        }).then(() => {
+            window.location.href = `/checkout?coupon=${id}`;
+        });
+    }
+}
+
 </script>
-<%-include('footer')-%>
+    

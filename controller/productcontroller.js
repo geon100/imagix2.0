@@ -6,12 +6,13 @@ const cropImg=require('../middlewares/sharp');
 let crederror=false,success=false// flags
 
 const loadPro=async(req,res)=>{
-  const page = parseInt(req.query.page) || 1;
+  try {
+    const page = parseInt(req.query.page) || 1;
   const product=await Product.find({isDelete:false}).skip((page-1)*5).limit(5).lean()
   const prods=[]
   for(let prod of product){
      cat=await Category.find({_id:prod.category},{name:1})
-     console.log(cat);
+    
      prod.category=cat[0]
      prods.push(prod)
   }
@@ -19,11 +20,38 @@ const loadPro=async(req,res)=>{
   remain-=(page*5)
   
   res.render('admin/productlist',{prods,search:false,cp:page,remain})
+  } catch (error) {
+    console.log(error);
+  }
   
+}
+const prosearch=async(req,res)=>{
+  try {
+    const regex = new RegExp(`^${req.body.searchInput}`, 'i');
+  //return await Product.find({ admin: false, firstname: regex }, { password: 0, admin: 0 });
+  
+  let sprod=await Product.find({ isDelete:false, $or:[
+    { name: regex },
+    { brand: regex },
+    { description: regex },
+  ]});
+  
+  const prods=[]
+  for(let prod of sprod){
+     cat=await Category.find({_id:prod.category},{name:1})
+     
+     prod.category=cat[0]
+     prods.push(prod)
+  }
+   res.render('admin/productlist',{prods,search:true})
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 const addproView=async(req,res)=>{
-  const cat=await Category.find({isActive:true},{name:1}).lean()
+  try {
+    const cat=await Category.find({isActive:true},{name:1}).lean()
   if(crederror===true){
      crederror=false
      res.render('admin/addproduct',{cat,errmessage:'Error occured',message:''})
@@ -33,11 +61,15 @@ const addproView=async(req,res)=>{
      res.render('admin/addproduct',{cat,errmessage:'',message:'Success'})
    }else
    res.render('admin/addproduct',{cat,errmessage:'',message:''})
+  } catch (error) {
+    console.log(error);
+  }
   
 }
 
 const addPro=async(req,res)=>{
- await cropImg.crop(req)
+ try {
+  await cropImg.crop(req)
  const img=[]
  for(i=0;i<req.files.length;i++){
    img.push(req.files[i].filename)
@@ -57,19 +89,25 @@ const addPro=async(req,res)=>{
  await product.save()
  success=true
  res.redirect('/admin/add-product')
+ } catch (error) {
+  console.log(error);
+ }
 }
 
 const prodel=async(req,res)=>{
+ try {
   const prod=await Product.findById(req.params.id)
   prod.isDelete = true;
   await prod.save();
   res.redirect('/admin/products')
+ } catch (error) {
+  console.log(error);
+ }
 }
 const upProd=async(req,res)=>{
   
-  let product=await Product.findById(req.params.id)
-  
-     
+    try {
+      let product=await Product.findById(req.params.id)
      product.name=req.body.name
      product.description=req.body.description
      product.brand=req.body.brand.toUpperCase()
@@ -77,7 +115,14 @@ const upProd=async(req,res)=>{
      product.stock=req.body.stock
      product.regularPrice=req.body.rprice
      product.salePrice=req.body.sprice
-       
+     
+    if(req.body.deletedImages){
+      const delImgs=req.body.deletedImages.split(',')
+      delImgs.forEach(del=>{
+        product.images=product.images.filter(val=> val!=del)
+      })
+
+    }   
    if(req.files.length!=0){
      await cropImg.crop(req)
      const img=[]
@@ -95,30 +140,21 @@ const upProd=async(req,res)=>{
  await product.save()
  
  res.redirect('/admin/products')
+    } catch (error) {
+      console.log(error);
+    }
 }
 const editprod=async(req,res)=>{
   
-  const prod=await Product.findById(req.body.id)
+  try {
+    const prod=await Product.findById(req.body.id)
   const cat=await Category.find().lean()
   res.render('admin/editprod',{prod:prod,cat:cat,message:'',errmessage:''})
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-const prosearch=async(req,res)=>{
-  const regex = new RegExp(`^${req.body.searchInput}`, 'i');
-  //return await Product.find({ admin: false, firstname: regex }, { password: 0, admin: 0 });
-  
-  let sprod=await Product.find({ isDelete:false, name: regex });
-  if(sprod.length===0){
-     sprod=await Product.find({ isDelete:false, brand: regex });
-  }
-  const prods=[]
-  for(let prod of sprod){
-     cat=await Category.find({_id:prod.category},{name:1})
-     console.log(cat);
-     prod.category=cat[0]
-     prods.push(prod)
-  }
-   res.render('admin/productlist',{prods,search:true})
-}
+
 
 module.exports={loadPro,addproView,addPro,prodel,prosearch,editprod,upProd}

@@ -32,7 +32,7 @@
       <div class="col-lg-4">
         <div class="details_item">
           <h4>Estimated Delivery Date:</h4>
-          <p><%= order.deliveryDate %></p>
+          <p><%= order.deliveryDate.toDateString() %></p>
         </div>
       </div>
     </div>
@@ -73,36 +73,84 @@
         <div class="details_item">
           <h4>Payment Method</h4>
           <h3><%= order.paymentMethod %></h3>
+          <p> <span class="font-weight-bold">Payment Status:</span> <%= order.paymentStatus %></p>
+          <% if(order.paymentMethod==='online') { %>
+            <p> <span class="font-weight-bold">Payment ID:</span> <%= order.paymentDetails.paymentID %></p>
+          <% } %>
         </div>
       </div>
       <div class="col-lg-4">
         <div class="details_item">
           <h4>Grand Total</h4>
           <h3>  Rs.<%= order.totalAmount %></h3>
+          <% if(order.discount) {%>
+            <h6>discount applied: Rs. <%= order.discount %></h6>
+          <% } %>
         </div>
       </div>
     </div>
     
     <div class="row mt-5">
       <% if (order.orderStatus === 'Delivered') { %>
-      <div class="col-lg-6">
-        <a href="/products" class="btn btn-rounded btn-danger">Return</a>
+      <div class="col-lg-4">
+        <% if(order.return) { %>
+          <h5>Return Status: <%= order.returninfo%></h5>
+          <h5>Reason: <%= order.reason%></h5>
+          <%}else{%>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#returnModal">
+          Request Return
+        </button>
+        <div class="modal fade" id="returnModal" tabindex="-1" role="dialog" aria-labelledby="returnModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="returnModalLabel">Request Return</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <!-- Add a form for return reason input -->
+                <form id="returnForm" >
+                  <div class="form-group">
+                    <input type="hidden" value="<%= order._id %>" name="id">
+                    <label for="returnReason">Reason for Return</label>
+                    <textarea class="form-control" id="reason" name="reason" rows="4" required></textarea>
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                
+                <button type="button" class="btn btn-primary" id="submitReturn" onclick="confirmReturn()">Submit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <%}%>
+        <!-- <a href="javascript:void(0);" onclick="confirmReturn('<%= order._id %>')" class="btn btn-rounded btn-danger">Return</a> -->
       </div>
-      <% } else if (order.orderStatus === 'Cancelled') { %>
+      <% } else if (order.orderStatus === 'Cancelled'||order.orderStatus === 'Returned') { %>
         <div class="col-lg-5">
           
         </div>
       <% } else {%>
-      <div class="col-lg-6">
+      <div class="col-lg-4">
         <a href="javascript:void(0);" onclick="confirmCancel('<%= order._id %>')" class="btn btn-rounded btn-danger">Cancel</a>
       </div>
       <% } %>
-      <div class="col-lg-6">
+      <div class="col-lg-4">
         <a href="/profile?tab=orders" class="btn btn-rounded btn-info">Back to Orders</a>
       </div>
+      <%if(order.orderStatus==='Delivered'){%>
+        <div class="col-lg-4">
+          <a href="/download-invoice?id=<%= order._id %>" class="btn btn-rounded btn-dark">Download Invoice</a>
+        </div>
+        <% } %>
     </div>
   </div>
 </section>
+
+
 <!--================End Order Details Area =================-->
 
 <script>
@@ -122,6 +170,50 @@
     }
   });
 }
+function confirmReturn() {
+    Swal.fire({
+      title: 'Return Order?',
+      text: 'Are you sure you want to return this order?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, return it.',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Serialize the form data
+        const formData = $('#returnForm').serialize();
+        // Send an AJAX POST request to the server
+        console.log(formData)
+        $.ajax({
+          url: '/return',
+          method: 'POST',
+          data: formData,
+          success: (response) => {
+            if (response.status) {
+              window.location.href = `/profile?tab=orders`;
+            } else {
+              // Handle the case where the return request was not successful
+              Swal.fire({
+                title: 'Error',
+                text: 'Failed to process the return request.',
+                icon: 'error',
+              });
+            }
+          },
+          error: (xhr, status, error) => {
+            // Handle AJAX request errors
+            console.error(xhr.responseText);
+            Swal.fire({
+              title: 'Error',
+              text: 'An error occurred while processing the return request.',
+              icon: 'error',
+            });
+          },
+        });
+      }
+    });
+  }
 
 </script>
 <%-include('footer')-%>

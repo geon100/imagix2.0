@@ -73,7 +73,7 @@ productSchema.pre('save', async function (next) {
   const product = this;
   if (product.reviews && product.reviews.length > 0) {
       const totalRating = product.reviews.reduce((sum, review) => sum + review.rating, 0);
-      product.rating = totalRating / product.reviews.length;
+      product.rating = parseFloat((totalRating / product.reviews.length).toFixed(1));
   } else {
       product.rating = 0;
   }

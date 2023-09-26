@@ -49,7 +49,9 @@
                 </div>
             </div> <!-- row .// -->
         </article>
-        
+        <% if (prods.length===0) { %>
+            <h1>No products</h1>
+            <% } else { %>
         <% prods.forEach(function(prod) { %>
           <article class="itemlist">
               <div class="row align-items-center">
@@ -87,9 +89,12 @@
               </div> <!-- row .// -->
           </article> <!-- itemlist  .// -->
           <% }); %>
+          <% } %>
 
       </div> <!-- card-body end// -->
   </div> <!-- card end// -->
+
+  <% if (!search) { %>
   <div class="pagination-area mt-30 mb-50">
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-start">
@@ -105,7 +110,7 @@
         </ul>
     </nav>
 </div>
-
+<% } %>
 </section> <!-- content-main end// -->
 
 <%-include('footer')-%>

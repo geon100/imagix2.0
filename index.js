@@ -28,6 +28,9 @@ app.use(function(req, res, next) {
 app.use('/',require('./routes/userRoute'))
 app.use('/admin',require('./routes/adminRoute'))
 
+app.get('*', (req, res) => {
+  res.render('users/Error404');
+});
  app.listen(PORT,()=>{
   console.log(`Server is running at PORT: ${PORT}`);
  })

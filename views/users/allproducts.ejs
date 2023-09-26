@@ -27,13 +27,13 @@
       
       <div class="sidebar-filter mt-50">
         <div class="top-filter-head">Product Filters</div>
+        <form action="/products" method="get">
         <div class="common-filter">
-          <form action="/products" method="get">
           <div class="head">Category</div>
             <select id="category" class="form-select" name="category">
               <option value="">All Categories</option>
               <% cat.forEach(function(cat) { %>
-                <option value="<%= cat._id %>" <% if(cat._id.toString() === categoryFilter) { %>selected<% } %>><%= cat.name %></option>
+                <option value="<%=cat._id %>" <% if(cat._id.toString() === categoryFilter) { %>selected<% } %>><%= cat.name %></option>
               <% }); %>
             </select>
           
@@ -48,8 +48,8 @@
           </select>
         </div>
         <div><button type="submit" class="btn btn-warning mt-4">Apply Filters</button></div>
+      </form>
       </div>
-    </form>
     </div>
     <div class="col-xl-9 col-lg-8 col-md-7">
       <!-- Start Filter Bar -->
@@ -58,6 +58,7 @@
           <form method="get" action="/products">
             <input type="hidden" name="category" value="<%= categoryFilter %>">
             <input type="hidden" name="brand" value="<%= brandFilter %>">
+            
             <select onchange="this.form.submit()" name="sort">
               <option value="0">Sort by</option>
               <option value="1" <% if (sort === 1) { %>selected<% } %>>Price: Low to High</option>
@@ -108,9 +109,9 @@
                   <div class="prd-bottom">
                     <form action="/addToCart" method="post" style="display: inline;">
                     <input type="hidden" value="<%= prod._id %>" name="id">
-                    <button class="btn-danger btn-rounded" >Add to cart</button>
+                    <button class="btn btn-danger btn-rounded" >Add to cart</button>
                   </form>
-                    <button class="btn-primary btn-rounded"><a href="/productdetails?id=<%= prod._id %>" style="text-decoration: none;color: white;">View More</a></button>
+                    <button class="btn btn-primary btn-rounded"><a href="/productdetails?id=<%= prod._id %>" class="btn-w" style="text-decoration: none;color: white;">View More</a></button>
                   <!-- <a href="/productdetails?id=<%= prod._id %>" class="social-info">
                     <span class="lnr lnr-move"></span>
                     <p class="hover-text">view more</p>

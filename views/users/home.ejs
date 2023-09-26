@@ -1,24 +1,21 @@
 <%-include('header')-%>
 
 <!-- start banner Area -->
-<section class="banner-area">
+<section class="banner-area" style="background-image: url(/bannerImages/<%= banner.image%>);background-size: cover;
+  position: relative;">
   <div class="container">
     <div class="row fullscreen align-items-center justify-content-start">
       <div class="col-lg-12">
         <!-- Single Banner Slide -->
-        <div class="row single-slide align-items-center d-flex">
+        <div class="row single-slide align-items-center d-flex" >
           <div class="col-lg-5 col-md-6">
             <div class="banner-content">
-              <h1>Capture it <br>All</h1>
-              <p>“If you are out there shooting, things will happen for you. If you’re not out there, you’ll only hear about it.”</p>
+              <h1><%= banner.title %></h1>
+              <p><%= banner.description %></p>
               <!-- Add any additional content or buttons here -->
             </div>
           </div>
-          <div class="col-lg-7">
-            <div class="banner-img">
-              <img class="img-fluid" src="../../public/imagixImages/—Pngtree—film clipart movie movie camera_11077307.png" alt="">
-            </div>
-          </div>
+          
         </div>
         <!-- End of Single Banner Slide -->
 

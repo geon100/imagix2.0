@@ -35,8 +35,23 @@
                     </a>
                 </li>
                 <li class="menu-item <%= isActive('/orders') ? 'active' : '' %>">
-                    <a class="menu-link" href="/admin/orders"> <i class="icon material-icons md-category"></i>
+                    <a class="menu-link" href="/admin/orders"> <i class="icon material-icons md-shopping_basket"></i>
                         <span class="text">Order</span>
+                    </a>
+                </li>
+                <li class="menu-item <%= isActive('/coupons') ? 'active' : '' %>">
+                    <a class="menu-link" href="/admin/coupons"> <i class="icon material-icons md-local_offer"></i>
+                        <span class="text">Coupons</span>
+                    </a>
+                </li>
+                <li class="menu-item <%= isActive('/banners') ? 'active' : '' %>">
+                    <a class="menu-link" href="/admin/banners"> <i class="icon material-icons md-menu_open"></i>
+                        <span class="text">Banners</span>
+                    </a>
+                </li>
+                <li class="menu-item <%= isActive('/report') ? 'active' : '' %>">
+                    <a class="menu-link" href="/admin/report"> <i class="icon material-icons md-apps"></i>
+                        <span class="text">Report</span>
                     </a>
                 </li>
             </ul>

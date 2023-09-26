@@ -1,6 +1,9 @@
 const mongoose=require('mongoose')
-const dbName='imagix'
-const dbUrl = 'mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.10.1';
+const dotenv=require('dotenv').config()
+const dbName=process.env.dbName
+const dbUrl = process.env.dbUrl
+
+console.log(typeof dbName,typeof dbUrl)
 
 const dbConnect = {
   connect:()=>{
@@ -10,4 +13,4 @@ const dbConnect = {
   }
 }
  
-module.exports=dbConnect
+module.exports=dbConnect 

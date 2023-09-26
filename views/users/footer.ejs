@@ -96,14 +96,21 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	<script src="js/gmaps.min.js"></script>
 	<script src="js/main.js"></script>
 	<script src="imgzoom/zoom.css"></script>
-
+	<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 	<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
 	<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-	
+		<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 		<script>
 			$(document).ready(function() {
-  $('#myTable').DataTable({"order": [[1, "desc"]]});
+  $('#myTable').DataTable({"order": [[5, "desc"]],
+	"columnDefs": [
+      {
+        "targets": 5, // Assuming the lastUpdated column is the second column (index 1)
+        "type": "date", // Set the data type to date for proper sorting
+      }
+    ]
+});
 });
 		</script>
 </body>

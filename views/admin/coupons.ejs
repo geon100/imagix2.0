@@ -1,0 +1,280 @@
+<%-include('header')-%>
+
+<%-include('nav')-%>
+
+<section class="content-main">
+  <div class="content-header">
+    <h2 class="content-title">Coupons</h2>
+  </div>
+  <div class="card mb-4">
+    <header class="card-header">
+      <div class="row gx-3">
+        <h4>Coupons List</h4>
+      </div>
+    </header> <!-- card-header end// -->
+    <div class="card-body">
+      <div class="table-responsive">
+        <% if(coupons.length===0) {%>
+          <h3>No Coupons</h3>
+          <%}else{%>
+        <table class="table table-striped">
+          <thead class="bg-dark text-white">
+            <tr>
+              <th>Code</th>
+              <th>Info</th>
+              <th>Discount Percent</th>
+              <th>Minimum Purchase</th>
+              <th>Maximum Discount</th>
+              <th>Expiration Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+                <% coupons.forEach(function(coupon, index) { %>
+                  <tr>
+                    <td>
+                      <div class="info pl-3">
+                        <h6 class="mb-0 title"><%= coupon.code %></h6>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="info pl-3">
+                        <h6 class="mb-0 title"><%= coupon.description %></h6>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="info pl-3">
+                        <h6 class="mb-0 title"><%= coupon.discountPercent %></h6>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="info pl-3">
+                        <h6 class="mb-0 title"><%= coupon.minPurchase %></h6>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="info pl-3">
+                        <h6 class="mb-0 title"><%= coupon.maxDiscount %></h6>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="info pl-3">
+                        <h6 class="mb-0 title"><%= coupon.expirationDate.toDateString() %></h6>
+                      </div>
+                    </td>
+                    <td>
+                        <div class="form-check form-switch">
+                          <input class="form-check-input opacity-10 border border-success pl-3" type="checkbox" onchange="statusChange(<%= index %>)" name="isActive" role="switch" id="flexSwitchCheck" <% if (coupon.isActive) { %>checked<% } %>>
+                          <input type="hidden" value="<%=coupon._id%>" name="id" id="coupon_id-<%= index %>">
+                        </div>
+                    </td>
+                    
+                  </tr>
+                <% }); %>
+                <% } %>
+          </tbody>
+        </table> <!-- table-responsive.// -->
+      </div>
+    </div> <!-- card-body end// -->
+  </div> <!-- card end// -->
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addCouponModal">
+    Add Coupon
+  </button>
+  <!-- <div class="card">
+    
+  </div> -->
+  <div class="modal fade" id="addCouponModal" tabindex="-1" role="dialog" aria-labelledby="addCouponModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addCouponModalLabel">Add Coupon</h5>
+          <button type="button" class="close btn btn-transparent" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Coupon data form -->
+          <form id="couponForm">
+            <div class="form-group">
+              <label for="code">Code</label>
+              <input type="text" class="form-control mb-2" id="code" name="code" readonly required>
+              <button type="button" class="btn btn-primary" id="codebtn" onclick="generateCode()">Generate Code</button>
+            </div>
+            <div class="form-group">
+              <label for="info">Info</label>
+              <input type="text" class="form-control" id="info" name="info" placeholder="short description" >
+            </div>
+            <div class="form-group">
+              <label for="discountPercent">Discount Percent</label>
+              <input type="number" class="form-control" id="discountPercent" name="discountPercent" placeholder="%" min="0" max="100" required>
+            </div>
+            <div class="form-group">
+              <label for="minPurchase">Minimum Purchase</label>
+              <input type="number" class="form-control" id="minPurchase" name="minPurchase" min="0" required>
+            </div>
+            <div class="form-group">
+              <label for="maxDiscount">Maximum Discount</label>
+              <input type="number" class="form-control" id="maxDiscount" name="maxDiscount" min="0" required>
+            </div>
+            
+          </form>
+        </div>
+        <div class="modal-footer">
+          <p id="err" class="text-danger"></p>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="saveCoupon" onclick="saveCoupon()">Save Coupon</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+</section> <!-- content-main end// -->
+
+<script>
+  function statusChange(index) {
+    
+    const id=document.getElementById(`coupon_id-${index}`).value
+    $.ajax({
+      url: `/admin/changeCouponStatus?id=${id}`,
+      type: 'Patch',
+      success: function (data) {
+        console.log(data)
+      }
+    })
+  }
+  function generateCode() {
+    $.ajax({
+      url: '/admin/generateCode',
+      type: 'GET',
+      success: function (data) {
+        
+        
+        // Show a success SweetAlert
+        Swal.fire({
+          icon: 'success',
+          title: 'Code Generated',
+          text: 'The coupon code has been successfully generated.',
+        });
+
+        // Update the input field with the generated code
+        $('#code').val(data.code);
+        document.getElementById('codebtn').style.display='none'
+      },
+      error: function (error) {
+        console.error('Error:', error);
+        
+        // Show an error SweetAlert
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'An error occurred while generating the coupon code.',
+        });
+      }
+    });
+
+  }
+
+  function saveCoupon() {
+  if(validate()){
+    const formdata = $('#couponForm').serialize();
+  $.ajax({
+  url: '/admin/addcoupon',
+  method: 'post',
+  data: formdata,
+  success: function (data) {
+    // Show a SweetAlert with only an "OK" button
+    Swal.fire({
+      icon: 'success',
+      title: 'Coupon Created',
+      text: 'The coupon has been successfully created.',
+      confirmButtonText: 'OK', // Customize the "OK" button text
+    }).then(() => {
+      // Redirect to the coupons page
+      window.location.href = '/admin/coupons';
+    });
+  },
+  error: function (error) {
+    console.error('Error:', error);
+
+    // Show an error SweetAlert with only an "OK" button
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'An error occurred while generating the coupon code.',
+      confirmButtonText: 'OK', // Customize the "OK" button text
+    }).then(() => {
+      // Redirect to the coupons page
+      window.location.href = '/admin/coupons';
+    });
+  },
+});
+  }
+
+  }
+  function validate() {
+    const code = document.getElementById('code').value;
+    const info = document.getElementById('info').value;
+    const discountPercent = document.getElementById('discountPercent').value;
+    const minPurchase = document.getElementById('minPurchase').value;
+    const maxDiscount = document.getElementById('maxDiscount').value;
+    const errorMessage = document.getElementById('err');
+  
+    // Reset the error message
+    
+
+    // Check if the code is empty
+    if (!code.trim()) {
+        errorMessage.textContent = 'Code is required';
+        setTimeout(() => {
+                errorMessage.textContent = ''
+            }, 5000)
+        return false;
+    }
+
+    // Check if info is empty
+    if (!info.trim()) {
+        errorMessage.textContent = 'Info is required';
+        setTimeout(() => {
+                errorMessage.textContent = ''
+            }, 5000)
+        return false;
+    }
+
+    // Check if discountPercent is a valid number between 0 and 100
+    const discountPercentValue = parseFloat(discountPercent);
+    if (isNaN(discountPercentValue) || discountPercentValue < 0 || discountPercentValue > 100) {
+        errorMessage.textContent = 'Discount Percent must be a valid number between 0 and 100';
+        setTimeout(() => {
+                errorMessage.textContentL = ''
+            }, 5000)
+        return false;
+    }
+
+    // Check if minPurchase is a valid number greater than or equal to 0
+    const minPurchaseValue = parseFloat(minPurchase);
+    if (isNaN(minPurchaseValue) || minPurchaseValue < 0) {
+        errorMessage.textContent = 'Minimum Purchase must be a valid number greater than or equal to 0';
+        setTimeout(() => {
+                errorMessage.textContent = ''
+            }, 5000)
+        return false;
+    }
+
+    // Check if maxDiscount is a valid number greater than or equal to 0
+    const maxDiscountValue = parseFloat(maxDiscount);
+    if (isNaN(maxDiscountValue) || maxDiscountValue < 0) {
+        errorMessage.textContent = 'Maximum Discount must be a valid number greater than or equal to 0';
+        setTimeout(() => {
+                err.innerHTML = ''
+            }, 5000)
+        return false;
+    }
+
+    // All fields are valid
+    return true;
+}
+
+</script>
+<%-include('footer')-%>

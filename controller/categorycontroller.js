@@ -1,4 +1,5 @@
 const Category=require('../models/categorymodel')
+const Product = require('../models/productmodel')
 
 let crederror=false
 
@@ -26,12 +27,31 @@ const addCat=async(req,res)=>{
   }
   res.redirect('/admin/category')
 }
-const blockCat=async(req,res)=>{
-  const cat=await Category.findById(req.params.id)
-  cat.isActive = !cat.isActive;
-  await cat.save();
-  res.redirect('/admin/category')
-}
+const blockCat = async (req, res) => {
+  try {
+    const cat = await Category.findById(req.params.id);
+    cat.isActive = !cat.isActive;
+
+    // Find all products in the category and update their isActive status
+    const products = await Product.find({ category: cat._id });
+
+    // Update isActive for each product and save it
+    for (const product of products) {
+      product.isActive = !product.isActive;
+      await product.save();
+    }
+
+    // Save the updated category
+    await cat.save();
+
+    res.redirect('/admin/category');
+  } catch (error) {
+    // Handle any errors here
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+};
+
 
 const loadEdit=async(req,res)=>{
   console.log(req.query.id)

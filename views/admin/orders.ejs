@@ -21,6 +21,7 @@
                         <th>Payment Method</th>
                         <th>Total Amount</th>
                         <th>OrderStatus</th>
+                        <th>Last Updated</th>
                         <th><p id="test"></p></th>
                     </tr>
                 </thead>
@@ -28,7 +29,7 @@
                     <% orders.forEach(function(order, index) { %>
                     <tr>
                         <td><%= order.orderID %></td>
-                        <td><%= order.orderDate %></td>
+                        <td><%= order.orderDate.toDateString() %></td>
                         <td><%= order.customer.firstname+' '+order.customer.lastname %></td>
                         <td><%= order.paymentMethod %></td>
                         <td><%= order.totalAmount %></td>
@@ -39,6 +40,7 @@
                         <% } else { %>
                         <td class="text-primary"><%= order.orderStatus %></td>
                         <% } %>
+                        <td><%= order.lastUpdated.toDateString() %></td>
                         <td><a href="/admin/orderview?id=<%= order._id %>" class="btn btn-info">View</a></td>
                     </tr>
                     <% }); %>

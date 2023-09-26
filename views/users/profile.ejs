@@ -11,7 +11,7 @@
 </section>
 <!-- End Banner Area -->
 
-<div class="container">
+<div class="container-fluid">
   <div class="row">
       <div class="col-12">
           <div class="card">
@@ -39,8 +39,12 @@
                               <li class="nav-item">
                                 <a class="nav-link" id="orders-tab" data-toggle="tab" href="#orders" role="tab" aria-controls="address" aria-selected="false">Orders</a>
                               </li>
+                              <li class="nav-item">
+                                <a class="nav-link" id="wallet-tab" data-toggle="tab" href="#Wallet" role="tab" aria-controls="wallet" aria-selected="false">Wallet</a>
+                              </li>
                           </ul>
                           <div class="tab-content ml-1" id="myTabContent">
+                           
                               <div class="tab-pane fade show active" id="basicInfo" role="tabpanel" aria-labelledby="basicInfo-tab">
                               
                                   <div class="row">
@@ -170,6 +174,7 @@
                                       <th>Payment Method</th>
                                       <th>Total Amount</th>
                                       <th>OrderStatus</th>
+                                      <th>Last updated</th>
                                       <th><p id="test"></p></th>
                         
                                     </tr>
@@ -178,7 +183,7 @@
                                     <% orders.forEach(function(order,index) { %>
                                     <tr>
                                       <td><%= order.orderID %></td>
-                                      <td><%= order.orderDate %></td>
+                                      <td><%= order.orderDate.toDateString() %></td>
                                       <td><%= order.paymentMethod %></td>
                                       <td><%= order.totalAmount %></td>
                                       <% if (order.orderStatus === 'Delivered') { %>
@@ -188,7 +193,8 @@
                                       <% } else { %>
                                         <td class="text-primary"><%= order.orderStatus %></td>
                                       <% } %>
-                                      
+                                      <td><%= order.lastUpdated.toDateString() %></td>
+                                     
                                       <td><a href="/orderview?id=<%= order._id %>" class="btn btn-info">View</a></td>
                                       
                                     </tr>
@@ -196,6 +202,62 @@
                                 <% } %>
                                   </tbody>
                                 </table>
+                              </div>
+                              <div class="tab-pane fade" id="Wallet" role="tabpanel" aria-labelledby="wallet-tab">
+                                <div class="container">
+                                  <div class="row mb-5">
+                                    <div class="card border-warning" style="width: 18rem;">
+                                      <div class="card-header text-white bg-warning">
+                                        <h3>Wallet Balance</h3>
+                                      </div>
+                                      <div class="card-body">
+                                        <h5>Rs. <%= user.Wallet %></h5>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="row">
+                                    <div class="card border-warning">
+                                      <div class="card-header text-white bg-warning">
+                                        <h3>Wallet History</h3>
+                                      </div>
+                                      <div class="card-body">
+                                        <table class="table table-striped">
+                                          <thead>
+                                              <tr>
+                                                  <th>Order ID</th>
+                                                  <th>Transaction Type</th>
+                                                  <th>Amount</th>
+                                              </tr>
+                                          </thead>
+                                          <tbody>
+                                            <% orders.forEach(function(order,index) { %>
+                                              
+                                              <% if((order.orderStatus==='Returned' || order.orderStatus==='Cancelled') && order.paymentStatus==='Paid'){ %>
+                                                <tr>
+                                                  <td><%= order.orderID%></td>
+                                                  <td><span class="badge rounded-pill alert-success">Credit</span></td>
+                                                  <td class="text-success">+ <%= order.totalAmount %></td>
+                                                </tr>
+                                                <%}if(order.paymentMethod==='Wallet'){%>
+                                                  <tr>
+                                                    <td><%= order.orderID%></td>
+                                                    <td><span class="badge rounded-pill alert-danger">Debit</span></td>
+                                                    <td class="text-danger">- <%= order.totalAmount %></td>
+                                                  </tr>
+                                                  <% } %>
+                                                  
+                                              <% }); %>
+                                              <!-- Add more rows as needed -->
+                                          </tbody>
+                                      </table>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="container">
+                                  
+                                </div>
+                            
                               </div>
                           </div>
                       </div>
@@ -495,7 +557,8 @@ window.onload = function () {
   document.getElementById('orders-tab').click()
   else if(parameterValue==='address')
   document.getElementById('address-tab').click()
-
+  else if(parameterValue==='Wallet')
+  document.getElementById('wallet-tab').click()
   const addr= urlParams.get('addr');
   if(addr==='edit'){
     document.getElementById('editTrigger').click()
@@ -503,7 +566,7 @@ window.onload = function () {
     document.getElementById('Editbtn').click()
     document.getElementById('errB').innerHTML='Mail already exist'
   }
-
+  
   }
 
   function editvalidate() {
@@ -662,6 +725,27 @@ function editinfovalidate(){
    return true
       
 }
+
+// function dateFormat(field,dateString) {
+//   const date=new Date(dateString);
+//   const formattedDate = date.toLocaleDateString(undefined, {
+//   year: 'numeric',
+//   month: 'long',
+//   day: 'numeric',
+// });
+
+// const formattedTime = date.toLocaleTimeString(undefined, {
+//   hour: '2-digit',
+//   minute: '2-digit',
+//   second: '2-digit',
+//   hour12: false,
+//   timeZoneName: 'short',
+// });
+
+// // Combine the formatted date and time
+// document.getElementById('field').innerHTML= `${formattedDate} ${formattedTime}`;
+  
+// }
 </script>
 
 <%-include('footer')-%>

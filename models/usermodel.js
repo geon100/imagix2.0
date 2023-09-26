@@ -39,6 +39,10 @@ const userSchema = new mongoose.Schema({
       ],
     wishlist: {
         type:Array
+    },
+    Wallet:{
+        type:Number,
+        default:0
     }
     
 });

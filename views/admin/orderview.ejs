@@ -38,27 +38,56 @@
       </div>
       <div class="col-lg-4">
         <div class="details_item">
-          <h4>Change Status</h4>
-          <% if (order.orderStatus==='Cancelled') { %>
-            <h6 class="text-danger px-2">Cancelled</h6> 
+          
+        <% if (order.orderStatus==='Cancelled'||order.orderStatus==='Delivered') { %>
+            <span></span>
         <% } else { %>
-          <form action="/admin/changeStatus" method="post">
-            <input type="hidden" value="<%= order._id%>" name="id">
-        <select name="orderStatus" class="form-select" onchange="this.form.submit()" >
-          <option value="Pending" <% if (order.orderStatus==='Pending') { %>selected<% } %>>Pending</option>
-          <option value="Processing" <% if (order.orderStatus==='Processing') { %>selected<% } %>>Processing</option>
-          <option value="Shipped" <% if (order.orderStatus==='Shipped') { %>selected<% } %>>Shipped</option>
-          <option value="Delivered" <% if (order.orderStatus==='Delivered') { %>selected<% } %>>Delivered</option>
-          <% if (order.orderStatus!='Delivered') { %>
-          <option value="Cancelled" <% if (order.orderStatus==='Cancelled') { %>selected <% }  %>>Cancelled</option>
-          <% } %>
-        </select>
-      </form>
+          <h4>Change Status</h4>
+          <form action="/admin/changeStatus" method="post" id="statusChangeForm">
+            <input type="hidden" value="<%= order._id %>" name="id">
+            <select name="orderStatus" class="form-select" onchange="confirmStatusChange()">
+                <option value="Pending" <% if (order.orderStatus === 'Pending') { %>selected<% } %>>Pending</option>
+                <option value="Processing" <% if (order.orderStatus === 'Processing') { %>selected<% } %>>Processing</option>
+                <option value="Shipped" <% if (order.orderStatus === 'Shipped') { %>selected<% } %>>Shipped</option>
+                <option value="Delivered" <% if (order.orderStatus === 'Delivered') { %>selected<% } %>>Delivered</option>
+                <% if (order.orderStatus !== 'Delivered') { %>
+                    <option value="Cancelled" <% if (order.orderStatus === 'Cancelled') { %>selected <% } %>>Cancel</option>
+                <% } %>
+            </select>
+        </form>
       <% } %>
         </div>
       </div>
     </div>
-
+   <div class="card">
+    <div class="card-body">
+      <% if(order.return) {%>
+        <div class="row order_d_inner mt-5 mb-4">
+          
+          <% if(order.returninfo==='Pending'){%>
+            <p class="text-danger">User has requested a return for this order.</p>
+              <div class="col-lg-2"><form action="/admin/returnStatus" method="post">
+                <input type="hidden" value="<%= order._id%>" name="id">
+                <input type="hidden" value="Approved" name="status">
+                <button class="btn btn-success">Approve</button>
+              </form></div>
+              <div class="col-lg-2"><form action="/admin/returnStatus" method="post">
+                <input type="hidden" value="<%= order._id%>" name="id">
+                <input type="hidden" value="Declined" name="status">
+                <button class="btn btn-danger">Decline</button>
+              </form></div>
+              <p> <span class="font-weight-bold">Return Status:</span> <%= order.returninfo %></p>
+              <p> <span class="font-weight-bold">Return Reason:</span> <%= order.reason %></p>
+            <% }else{ %>
+              <p> <span class="font-weight-bold">Return Status:</span> <%= order.returninfo %></p>
+              <p> <span class="font-weight-bold">Return Reason:</span> <%= order.reason %></p>
+            <% } %>
+    </div>
+    
+          
+    </div>
+   </div>
+  <% } %>
 
 
     <div class="card">
@@ -95,12 +124,19 @@
         <div class="details_item">
           <h4>Payment Method</h4>
           <h3><%= order.paymentMethod %></h3>
+          <p> <span class="font-weight-bold">Payment Status:</span> <%= order.paymentStatus %></p>
+          <% if(order.paymentMethod==='online') { %>
+            <p> <span class="font-weight-bold">Payment ID:</span> <%= order.paymentDetails.paymentID %></p>
+          <% } %>
         </div>
       </div>
       <div class="col-lg-4">
         <div class="details_item">
           <h4>Grand Total</h4>
           <h3>  Rs.<%= order.totalAmount %></h3>
+          <% if(order.discount) {%>
+            <h6>discount applied: Rs. <%= order.discount %></h6>
+          <% } %>
         </div>
       </div>
     </div>
@@ -118,7 +154,21 @@
 <!--================End Order Details Area =================-->
 
 <script>
-  
+   function confirmStatusChange() {
+                Swal.fire({
+                    title: 'Confirm Status Change',
+                    text: 'Are you sure you want to change the order status?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes',
+                    cancelButtonText: 'No',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // If the user clicks "Yes," submit the form
+                        document.getElementById('statusChangeForm').submit();
+                    }
+                });
+            }
 
 </script>
 <%-include('footer')-%>

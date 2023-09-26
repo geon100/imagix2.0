@@ -18,6 +18,7 @@
     "ejs": "^3.1.9",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
+    "moment": "^2.29.4",
     "mongodb": "^6.0.0",
     "mongoose": "^7.4.3",
     "morgan": "^1.10.0",
@@ -27,8 +28,11 @@
     "nodemailer": "^6.9.4",
     "nodemon": "^3.0.1",
     "path": "^0.12.7",
+    "pdfkit": "^0.13.0",
+    "pdfmake": "^0.2.7",
     "razorpay": "^2.9.2",
     "sharp": "^0.32.5",
-    "shortid": "^2.2.16"
+    "shortid": "^2.2.16",
+    "voucher-code-generator": "^1.3.0"
   }
 }

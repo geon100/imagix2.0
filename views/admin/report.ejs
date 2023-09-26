@@ -1,0 +1,143 @@
+<%-include('header')-%>
+<%-include('nav')-%>
+
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">Sales report</h2>
+        </div>
+    </div>
+    <div>
+      <div class="card mb-4">
+        <header class="card-header">
+            <div class="row gx-3">
+              <form action="/admin/report">
+                <select class="form-select" name="time" id="time">
+                    <option value="">All orders</option>
+                    <option value="Today">Today</option>
+                    <option value="This month">This month</option>
+                    <option value="This year">This year</option>
+                    <option value="Custom">Custom</option> <!-- Add a custom date option -->
+                </select>
+                <div id="customDateFields" style="display: none;"> <!-- Hidden by default -->
+                    <label for="startDate">Start Date:</label>
+                    <input class="form-control" type="date" name="startDate" id="startDate">
+                    <label for="endDate">End Date:</label>
+                    <input class="form-control" type="date" name="endDate" id="endDate">
+                    <button class="btn btn-primary" type="submit">Apply</button>
+                </div>
+            </form>
+            
+                
+            </div>
+        </header> <!-- card-header end// -->
+        <% if (orders.length === 0) { %>
+        <h4>No Orders</h4>
+        <% } else { %>
+          
+            <div class="card-body">
+        <div class="table">
+            <table  class="table table-striped" id="reportTable">
+              <thead class="bg-dark text-danger">
+                <tr>
+                    <th id="orderIDHeader">Order ID</th>
+                    <th id="orderDateHeader">Order Date</th>
+                    <th id="customerHeader">Customer</th>
+                    <th id="paymentMethodHeader">Payment Method</th>
+                    <th id="totalAmountHeader">Total Amount</th>
+                    <th id="orderStatusHeader">Order Status</th>
+                </tr>
+            </thead>
+                <tbody>
+                    <% orders.forEach(function(order, index) { %>
+                    <tr>
+                        <td><%= order.orderID %></td>
+                        <td><%= order.orderDate.toDateString() %></td>
+                        <td><%= order.customer.firstname+' '+order.customer.lastname %></td>
+                        <td><%= order.paymentMethod %></td>
+                        <td><%= order.totalAmount %></td>
+                        <% if (order.orderStatus === 'Delivered') { %>
+                        <td class="text-success"><%= order.orderStatus %></td>
+                        <% } else if (order.orderStatus === 'Cancelled') { %>
+                        <td class="text-danger"><%= order.orderStatus %></td>
+                        <% } else { %>
+                        <td class="text-primary"><%= order.orderStatus %></td>
+                        <% } %>
+                    </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+        <% } %>
+        <div>
+    <button class="btn btn-dark" id="downloadExcel" onclick="downloadExcel()">Download Excel</button>
+        </div>
+    </div>
+</section> <!-- content-main end// -->
+<!-- Include jsPDF -->
+
+<%-include('footer')-%>
+<script>
+  
+
+    // Function to download the table data as an Excel file
+    function downloadExcel() {
+        const table = document.getElementById('reportTable');
+        const ws = XLSX.utils.table_to_sheet(table);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Sales Report');
+        XLSX.writeFile(wb, 'sales_report.xlsx');
+    }
+
+  $(document).ready(function () {
+    const timeSelect = $('select#time');
+    const customDateFields = $('#customDateFields');
+
+    timeSelect.change(function () {
+        if (timeSelect.val() === 'Custom') {
+            customDateFields.show();
+        } else {
+            customDateFields.hide();
+            this.form.submit()
+        }
+       
+   
+    });
+
+    // Handle form submission when the "Apply" button is clicked
+    $('#customDateFields button[type="submit"]').click(function (event) {
+        event.preventDefault(); // Prevent the default form submission
+        this.form.submit(); // Submit the form manually
+    });
+
+    // Get the selected option value from the query parameter
+    const selectedValue = new URLSearchParams(window.location.search).get('time');
+
+    // Set the selected option based on the query parameter value
+    timeSelect.val(selectedValue);
+
+    $('th').click(function () {
+        var table = $(this).parents('table').eq(0);
+        var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()));
+        this.asc = !this.asc;
+        if (!this.asc) {
+            rows = rows.reverse();
+        }
+        for (var i = 0; i < rows.length; i++) {
+            table.append(rows[i]);
+        }
+    });
+    
+    function comparer(index) {
+        return function (a, b) {
+            var valA = getCellValue(a, index);
+            var valB = getCellValue(b, index);
+            return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB);
+        };
+    }
+
+    function getCellValue(row, index) {
+        return $(row).children('td').eq(index).text();
+    }
+});
+</script>
