@@ -55,8 +55,8 @@ input[type="radio"] {
           <form action="/addToCart" onclick="" method="post" id="cartform">
             <% if (prod.stock>0) { %>
           <div class="product_count">
-            <label for="qty">Quantity:</label>
-            <input type="number" min="1" id="qty" name="qty" value="1" onchange="updateQuantity(this, <%= prod.stock %>)">
+            <!-- <label for="qty">Quantity:</label> -->
+            <!-- <input type="number" min="1" id="qty" name="qty" value="1" onchange="updateQuantity(this, <%= prod.stock %>)"> -->
             <input type="hidden" value="<%= prod._id %>" name="id">
           </div>
           <div class="card_area d-flex align-items-center">
@@ -220,7 +220,7 @@ input[type="radio"] {
   stars.forEach((star) => {
     star.addEventListener('click', () => {
       const rating = star.getAttribute('value'); // Get the rating value
-      alert(`You rated it as ${rating}`);
+      
 
       // Update the style of the stars
       stars.forEach((s) => {

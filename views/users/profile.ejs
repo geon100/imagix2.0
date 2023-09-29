@@ -455,7 +455,7 @@
       return false;
    }
   
-   if(!nameRegex.test(firstname.value)){
+   if(!nameRegex.test(firstname.value.trim())){
       err.innerHTML = 'First name not valid'
       setTimeout(()=>{
          err.innerHTML = ''
@@ -469,7 +469,7 @@
       }, 5000)
       return false;
    }
-   if(!nameRegex.test(lastname.value)){
+   if(!nameRegex.test(lastname.value.trim())){
       err.innerHTML = 'Last name not valid'
       setTimeout(()=>{
          err.innerHTML = ''
@@ -483,7 +483,7 @@
       }, 5000)
       return false;
    }
-   if (!emailRegex.test(email.value)) {
+   if (!emailRegex.test(email.value.trim())) {
       err.innerHTML = "Please enter a valid email"
       setTimeout(() => {
          err.innerHTML = ''
@@ -500,7 +500,7 @@
       return false;
    }
 
-   if(!mobileRegex.test(mobile.value)){
+   if(!mobileRegex.test(mobile.value.trim())){
       err.innerHTML = 'Please enter a valid number'
       setTimeout(()=>{
          err.innerHTML = ''
@@ -606,7 +606,7 @@ window.onload = function () {
       }, 5000)
       return false;
    }
-   if (!emailRegex.test(email.value)) {
+   if (!emailRegex.test(email.value.trim())) {
       err.innerHTML = "Please enter a valid email"
       setTimeout(() => {
          err.innerHTML = ''
@@ -623,7 +623,7 @@ window.onload = function () {
       return false;
    }
 
-   if(!mobileRegex.test(mobile.value)){
+   if(!mobileRegex.test(mobile.value.trim())){
       err.innerHTML = 'Please enter a valid number'
       setTimeout(()=>{
          err.innerHTML = ''
@@ -669,7 +669,7 @@ function editinfovalidate(){
             }, 5000)
             return false;
          }
-         if(!nameRegex.test(firstname.value)){
+         if(!nameRegex.test(firstname.value.trim())){
       err.innerHTML = 'First name not valid'
       setTimeout(()=>{
          err.innerHTML = ''
@@ -683,7 +683,7 @@ function editinfovalidate(){
       }, 5000)
       return false;
    }
-   if(!nameRegex.test(lastname.value)){
+   if(!nameRegex.test(lastname.value.trim())){
       err.innerHTML = 'Last name not valid'
       setTimeout(()=>{
          err.innerHTML = ''
@@ -697,7 +697,7 @@ function editinfovalidate(){
       }, 5000)
       return false;
    }
-   if (!emailRegex.test(email.value)) {
+   if (!emailRegex.test(email.value.trim())) {
       err.innerHTML = "Please enter a valid email"
       setTimeout(() => {
          err.innerHTML = ''
@@ -714,7 +714,7 @@ function editinfovalidate(){
       return false;
    }
 
-   if(!mobileRegex.test(mobile.value)){
+   if(!mobileRegex.test(mobile.value.trim())){
       err.innerHTML = 'Please enter a valid number'
       setTimeout(()=>{
          err.innerHTML = ''
@@ -726,26 +726,7 @@ function editinfovalidate(){
       
 }
 
-// function dateFormat(field,dateString) {
-//   const date=new Date(dateString);
-//   const formattedDate = date.toLocaleDateString(undefined, {
-//   year: 'numeric',
-//   month: 'long',
-//   day: 'numeric',
-// });
 
-// const formattedTime = date.toLocaleTimeString(undefined, {
-//   hour: '2-digit',
-//   minute: '2-digit',
-//   second: '2-digit',
-//   hour12: false,
-//   timeZoneName: 'short',
-// });
-
-// // Combine the formatted date and time
-// document.getElementById('field').innerHTML= `${formattedDate} ${formattedTime}`;
-  
-// }
 </script>
 
 <%-include('footer')-%>

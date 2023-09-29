@@ -97,7 +97,7 @@
       return false;
    }
   
-   if(!nameRegex.test(firstname.value)){
+   if(!nameRegex.test(firstname.value.trim())){
       err.innerHTML = 'First name not valid'
       setTimeout(()=>{
          err.innerHTML = ''
@@ -111,7 +111,7 @@
       }, 5000)
       return false;
    }
-   if(!nameRegex.test(lastname.value)){
+   if(!nameRegex.test(lastname.value.trim())){
       err.innerHTML = 'Last name not valid'
       setTimeout(()=>{
          err.innerHTML = ''
@@ -125,7 +125,7 @@
       }, 5000)
       return false;
    }
-   if (!emailRegex.test(email.value)) {
+   if (!emailRegex.test(email.value.trim())) {
       err.innerHTML = "Please enter a valid email"
       setTimeout(() => {
          err.innerHTML = ''
@@ -142,7 +142,7 @@
       return false;
    }
 
-   if(!mobileRegex.test(mobile.value)){
+   if(!mobileRegex.test(mobile.value.trim())){
       err.innerHTML = 'Please enter a valid number'
       setTimeout(()=>{
          err.innerHTML = ''
@@ -157,7 +157,7 @@
       return false;
    }
 
-   if (!passwordRegex.test(password.value)) {
+   if (!passwordRegex.test(password.value.trim())) {
       err.innerHTML = "Please enter a tight password"
       setTimeout(() => {
          err.innerHTML = ''
