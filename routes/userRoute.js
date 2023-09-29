@@ -9,7 +9,7 @@ const {loadhome,loadLogin,logoutUser,loadRegister,verfiyUser,insertUser,
         otpFunc,verifyOtp,showProducts,showProdDetails,Prodsearch,addReview,searchload,forgotLoad,
         verifyForgot,cartLoad,profileLoad,addAddress,delAdddress,editAdddress,
         addToCart,upCart,cartDel,loadWish,addWish,delWish,checkoutLoad,placeorder,
-        orderDone,orderCancel,orderview,saveAddr,upbasic,verifypayment,orderReturn,orderInvoice}=require('../controller/userController');
+        orderDone,orderCancel,orderview,saveAddr,upbasic,verifypayment,orderReturn,orderInvoice,payFail}=require('../controller/userController');
 //const { render } = require('ejs');
 
 router.use(nocache())
@@ -55,6 +55,7 @@ router.get('/checkout',isLogin,checkCart,checkoutLoad)
 router.post('/placeorder',isLogin,checkCart,placeorder)
 router.post('/verifypayment',isLogin,verifypayment)
 router.get('/ordersuccess',isLogin,orderDone)
+router.get('/paymentFailed',isLogin,payFail)
 //profile
 router.get('/profile',isLogin,profileLoad)
 router.post('/add-address',isLogin,addAddress)

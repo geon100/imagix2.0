@@ -406,7 +406,7 @@
     function razorpayPayment(order){
         var options = {
     "key": 'rzp_test_oyuTcEw6xvrLWU', // Enter the Key ID generated from the Dashboard
-    "amount": order.amount*100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+    "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
     "currency": "INR",
     "name": "Acme Corp",
     "description": "Test Transaction",
@@ -426,9 +426,45 @@
     },
     "theme": {
         "color": "#3399cc"
+    },
+    "retry":{
+        "enabled":false
+    },
+    "modal":{
+        "ondismiss": function() {
+            Swal.fire({
+           icon: 'error', 
+           title: 'Payment Failed',
+           text: 'Your payment was not successful. Please try again later.',
+           confirmButtonColor: '#3085d6', // Customize the confirm button color
+           confirmButtonText: 'OK',
+           allowOutsideClick: false, 
+         }).then((result) => {
+           if (result.isConfirmed) {
+             window.location.href = '/paymentFailed';
+           }
+         });
+        },
+        "handleback":false,
+        "escape":false
     }
+
 };
 var rzp1 = new Razorpay(options);
+rzp1.on('payment.failed', function (response){
+    Swal.fire({
+           icon: 'error', 
+           title: 'Payment Failed',
+           text: 'Your payment was not successful. Please try again later.',
+           confirmButtonColor: '#3085d6', // Customize the confirm button color
+           confirmButtonText: 'OK',
+           allowOutsideClick: false, 
+         }).then((result) => {
+           if (result.isConfirmed) {
+             window.location.href = '/paymentFailed';
+           }
+         });
+});
 rzp1.open()
     }
 

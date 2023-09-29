@@ -3,8 +3,6 @@ const dotenv=require('dotenv').config()
 const dbName=process.env.dbName
 const dbUrl = process.env.dbUrl
 
-console.log(typeof dbName,typeof dbUrl)
-
 const dbConnect = {
   connect:()=>{
     mongoose.connect(dbUrl,{dbName}, { useNewUrlParser: true, useUnifiedTopology: true })

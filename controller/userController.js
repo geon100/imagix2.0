@@ -398,6 +398,7 @@ const addReview=async (req, res) => {
 //cart operations
 const cartLoad=async(req,res)=>{
    try {
+      failHandler()
       const user=await User.findById(req.session.user._id)
    const prods=[]
    let gtotal=0
@@ -654,7 +655,7 @@ const checkoutLoad=async(req,res)=>{
       let coupons=null
       const user=await User.findById(req.session.user._id)
       if (req.query.coupon) {
-         console.log(req.query.coupon);
+        
          coupons=await Coupon.findById(req.query.coupon)
       } else {
          coupons = await Coupon.find({ isActive: true, appliedUsers: { $nin: [user._id] } });
@@ -785,7 +786,28 @@ const orderview = async (req, res) => {
    }
  };
  
-
+ const  payFail=async(req,res)=>{
+try {
+   failHandler()
+   res.redirect('/cart')
+} catch (error) {
+   console.log(error.message)
+   res.status(500).redirect('/serverError')
+}
+ }
+async function failHandler(){
+   const order=await Order.findOne({paymentStatus:"Pending",paymentMethod:"online",orderStatus:"Pending"})
+   if(order){
+      let product={}
+   for (const val of order.products) {
+      product = await Product.findById(val.product);
+      product.stock+=val.quantity
+     }
+     order.orderStatus='Cancelled'
+     await order.save()
+     await product.save()
+   }
+}
 
 const orderCancel=async(req,res)=>{
   try {
@@ -908,4 +930,4 @@ const orderInvoice = async (req, res) => {
 module.exports={loadhome,loadRegister,loadLogin,logoutUser,insertUser,verfiyUser,otpFunc,verifyOtp,forgotLoad,verifyForgot,
                 showProducts,showProdDetails,Prodsearch,searchload,cartLoad,addToCart,upCart,cartDel,profileLoad,addAddress,
                 delAdddress,editAdddress,checkoutLoad,placeorder,orderCancel,orderDone,orderview,loadWish,addWish,delWish,saveAddr,
-                upbasic,verifypayment,orderReturn,orderInvoice,addReview}
+                upbasic,verifypayment,orderReturn,orderInvoice,addReview,payFail}
