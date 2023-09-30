@@ -396,6 +396,8 @@
         success: (response) => {
             if (response.codSuccess) {
                 window.location.href = `/ordersuccess?id=${response.id}`;
+            } else if(response.cartChanged){
+                window.location.reload()
             } else {
                 razorpayPayment(response);
             }

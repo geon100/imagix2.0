@@ -660,7 +660,7 @@ const checkoutLoad=async(req,res)=>{
       } else {
          coupons = await Coupon.find({ isActive: true, appliedUsers: { $nin: [user._id] } });
       }
-      
+   req.session.CartTemp=user.cart.slice()
    const prods=[]
    let gTotal=0,discount=0
    for (const val of user.cart) {
@@ -687,7 +687,9 @@ const checkoutLoad=async(req,res)=>{
       res.status(500).redirect('/serverError')
    }
 }
-
+function arraysEqual(arr1, arr2) {
+   return JSON.stringify(arr1) === JSON.stringify(arr2);
+ }
 const placeorder=async(req,res)=>{
    try {
        
@@ -699,6 +701,12 @@ const placeorder=async(req,res)=>{
       await coupon.save()
    }
    let gTotal=0
+  if(!arraysEqual(req.session.CartTemp,user.cart)){
+   console.log("QWERTY")
+   return res.json({cartChanged:true})
+   
+  }
+   
    for (const val of user.cart) {
       const product = await Product.findById(val.id);
       if(product.stock===0)
@@ -708,16 +716,17 @@ const placeorder=async(req,res)=>{
             salePrice: product.salePrice,
             quantity: val.quantity,
          };
+        gTotal+=productWithQuantity.salePrice*productWithQuantity.quantity
          product.stock-=val.quantity
          await product.save()
          prods.push(productWithQuantity);
    }
-   console.log(req.body.discount)
+   // console.log(req.body.discount)
    const order=new Order({
       customer:user._id,
       products:prods,
       paymentMethod:req.body.payment,
-      totalAmount:req.body.total,
+      totalAmount:gTotal,
       Address:req.body.selectedAddress,
       discount:req.body.discount||0
    })
