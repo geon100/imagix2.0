@@ -398,6 +398,11 @@
                 window.location.href = `/ordersuccess?id=${response.id}`;
             } else if(response.cartChanged){
                 window.location.reload()
+                Swal.fire({
+                icon: 'error',
+                title: 'New Cart Items Added',
+                text: 'Checkout Updated'
+            });
             } else {
                 razorpayPayment(response);
             }
