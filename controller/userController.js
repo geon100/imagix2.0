@@ -629,7 +629,7 @@ const editAdddress=async(req,res)=>{
         
         const existingUser = await User.findOne({ email: req.body.editEmail });
         if (existingUser) {
-          
+          console.log('User Exists')
           return res.redirect('/profile?addr=BInfo');
         }
       }
