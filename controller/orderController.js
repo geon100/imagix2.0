@@ -75,6 +75,7 @@ res.redirect('/admin/orders')
 }
 }
 let report=[]
+
 const reportload = async (req, res) => {
   try {
     let filters = {orderStatus:'Delivered'};

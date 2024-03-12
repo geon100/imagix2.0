@@ -4,6 +4,8 @@ const app=express()
 const dotenv=require('dotenv').config()
 const path=require('path')
 const PORT=process.env.PORT||4000
+
+
 mongo.connect()
 
 app.set('view engine', 'ejs'); 
