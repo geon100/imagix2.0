@@ -98,7 +98,7 @@
    }
   
    if(!nameRegex.test(firstname.value.trim())){
-      err.innerHTML = 'First name not valid'
+      err.innerHTML = 'First name should begin with Captial Letter'
       setTimeout(()=>{
          err.innerHTML = ''
       },5000)
@@ -112,7 +112,7 @@
       return false;
    }
    if(!nameRegex.test(lastname.value.trim())){
-      err.innerHTML = 'Last name not valid'
+      err.innerHTML = 'Last name should begin with Captial Letter'
       setTimeout(()=>{
          err.innerHTML = ''
       },5000)
@@ -143,7 +143,7 @@
    }
 
    if(!mobileRegex.test(mobile.value.trim())){
-      err.innerHTML = 'Please enter a valid number'
+      err.innerHTML = 'Phone number should be 10 digits'
       setTimeout(()=>{
          err.innerHTML = ''
       },5000)
