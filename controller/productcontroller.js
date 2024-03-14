@@ -5,6 +5,8 @@ const cropImg = require('../middlewares/sharp');
 
 let crederror = false, success = false// flags
 
+
+//load Products
 const loadPro = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -25,6 +27,8 @@ const loadPro = async (req, res) => {
   }
 
 }
+
+// search products
 const prosearch = async (req, res) => {
   try {
     const regex = new RegExp(`^${req.body.searchInput}`, 'i');
@@ -51,6 +55,7 @@ const prosearch = async (req, res) => {
   }
 }
 
+//add product page
 const addproView = async (req, res) => {
   try {
     const cat = await Category.find({ isActive: true }, { name: 1 }).lean()
@@ -69,6 +74,7 @@ const addproView = async (req, res) => {
 
 }
 
+//add product
 const addPro = async (req, res) => {
   try {
     await cropImg.crop(req)
@@ -96,6 +102,7 @@ const addPro = async (req, res) => {
   }
 }
 
+//delete product
 const prodel = async (req, res) => {
   try {
     const prod = await Product.findById(req.params.id)
@@ -106,6 +113,8 @@ const prodel = async (req, res) => {
     console.log(error);
   }
 }
+
+//update product
 const upProd = async (req, res) => {
 
   try {
@@ -146,6 +155,8 @@ const upProd = async (req, res) => {
     console.log(error);
   }
 }
+
+//edit product page
 const editprod = async (req, res) => {
 
   try {

@@ -1,14 +1,14 @@
-const Admin=require('../models/adminmodel')
-const User=require('../models/usermodel')
-const Category=require('../models/categorymodel')
-const Order=require('../models/ordermodel')
-const Product=require('../models/productmodel')
+const Admin=require('../models/adminmodel') // Importing Admin model
+const User=require('../models/usermodel') // Importing User model
+const Category=require('../models/categorymodel') // Importing Category model
+const Order=require('../models/ordermodel') // Importing Order model
+const Product=require('../models/productmodel') // Importing Product model
 
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt'); // Importing bcrypt for password hashing
 
-let crederror=false// flags
+let crederror=false // Flag to handle credential errors
 
-//admin login
+// Function to load admin login page
 const loadLogin = async(req,res)=>{
    try {  
       if(crederror===true){
@@ -22,8 +22,10 @@ const loadLogin = async(req,res)=>{
      console.log(error.message);
   }
 }
+
+// Function to get order count for each status
 async function Ordcount(){
-   const orders = await Order.find({}); // Fetch all orders (you may need to adjust this query)
+   const orders = await Order.find({}); // Fetch all orders 
 
 // Count orders by status
 const orderCounts = {
@@ -52,6 +54,8 @@ orders.forEach((order) => {
 });
 return orderCounts
 }
+
+// Function to get product count for each category
 function categoryCount(products){
    
   const categoryCounts = {};
@@ -66,7 +70,8 @@ function categoryCount(products){
   });
   return categoryCounts
 }
-//admin home
+
+// Function to load admin home page
 const loadhome = async(req,res)=>{
    try {
       const orders=await Order.find({ orderStatus: 'Delivered' }).sort({lastUpdated:-1})
@@ -86,7 +91,7 @@ const loadhome = async(req,res)=>{
    }
 }
 
-//verify login
+// Function to verify admin login credentials
 const verfiyUser = async(req,res)=>{
    try {
       const email = req.body.mail;
@@ -111,6 +116,7 @@ const verfiyUser = async(req,res)=>{
    }
 }
 
+// Function to handle admin logout
 const adminLogout= async(req,res)=>{
    try {
       req.session.admin=undefined
@@ -120,7 +126,7 @@ const adminLogout= async(req,res)=>{
    }
 }
 
-//user management
+// Function to load user management page
 const loadUser= async(req,res)=>{
    try {
       const users=await User.find({},{password:0}).lean()
@@ -133,7 +139,7 @@ const loadUser= async(req,res)=>{
     }
 }
 
-
+// Function to block/unblock user
 const blockUser=async(req,res)=>{
 try {
    const user=await User.findById(req.params.id)
@@ -145,6 +151,5 @@ try {
 }
 }
 
-
-
+// Exporting all functions as module
 module.exports={loadLogin,verfiyUser,adminLogout,loadhome,loadUser,blockUser}

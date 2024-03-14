@@ -5,10 +5,7 @@ const Banner = require('../models/bannermodel')
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 const Order = require('../models/ordermodel');
-const { ObjectId } = require('mongodb')
-const mongoose = require('mongoose')
 const razorpay = require('../middlewares/Razorpay');
-const { response } = require('express');
 const dotenv = require('dotenv').config()
 const Coupon = require('../models/couponmodel')
 const PDFDocument = require('pdfkit');
@@ -17,7 +14,7 @@ const fs = require('fs');
 let crederror = false
 let otp = 0
 
-
+//load home page
 const loadhome = async (req, res) => {
    try {
 
@@ -37,7 +34,7 @@ const loadhome = async (req, res) => {
 
 
 
-
+//load register page
 const loadRegister = async (req, res) => {
    try {
 
@@ -49,6 +46,7 @@ const loadRegister = async (req, res) => {
    }
 }
 
+//user sign up
 const insertUser = async (req, res) => {
    try {
       const email = req.body.email;
@@ -91,6 +89,7 @@ const insertUser = async (req, res) => {
    }
 };
 
+//load login page
 const loadLogin = async (req, res) => {
    try {
       if (crederror === true) {
@@ -106,6 +105,7 @@ const loadLogin = async (req, res) => {
    }
 }
 
+//authenticate user
 const verfiyUser = async (req, res) => {
    try {
       const email = req.body.username;
@@ -200,7 +200,7 @@ const otpFunc = async (req, res) => {
 }
 
 
-
+//verify otp
 const verifyOtp = async (req, res) => {
 
    try {
@@ -223,6 +223,8 @@ const verifyOtp = async (req, res) => {
       res.status(500).redirect('/serverError')
    }
 }
+
+//forgot password page
 const forgotLoad = async (req, res) => {
    try {
       if (crederror === true) {
@@ -237,6 +239,8 @@ const forgotLoad = async (req, res) => {
    }
 
 }
+
+//change password
 const verifyForgot = async (req, res) => {
    try {
       if (req.body.otp === String(otp)) {
@@ -292,10 +296,7 @@ const showProducts = async (req, res) => {
       if (brandFilter) {
          filter.brand = brandFilter;
       }
-      // if(req.query.price){
-      //    filter.salePrice=req.query.price
-      // }
-
+    
       if (sort === 1 || sort === -1) {
          prods = await Product.find(filter)
             .sort({ salePrice: sort })
@@ -338,10 +339,11 @@ const showProducts = async (req, res) => {
       res.status(500).redirect('/serverError')
    }
 };
+
 const Prodsearch = async (req, res) => {
    res.redirect(`/search?search=${req.body.searchinput}`)
 }
-
+//search results
 const searchload = async (req, res) => {
    const page = parseInt(req.query.page) || 1;
    const searchQuery = req.query.search
@@ -367,7 +369,7 @@ const searchload = async (req, res) => {
 }
 
 
-
+//view individual products
 const showProdDetails = async (req, res) => {
    try {
       let reviewPossible = false
@@ -385,6 +387,8 @@ const showProdDetails = async (req, res) => {
       res.status(500).redirect('/serverError')
    }
 }
+
+//add product review by customer
 const addReview = async (req, res) => {
    const { rating, description, productId } = req.body
    const review = {
@@ -400,6 +404,8 @@ const addReview = async (req, res) => {
 }
 
 //cart operations
+
+//cart page loading
 const cartLoad = async (req, res) => {
    try {
       failHandler()
@@ -419,7 +425,7 @@ const cartLoad = async (req, res) => {
       res.status(500).redirect('/serverError')
    }
 }
-
+// add product to cart
 const addToCart = async (req, res) => {
    try {
       const user = await User.findById(req.session.user._id)
@@ -455,6 +461,8 @@ const addToCart = async (req, res) => {
       res.status(500).redirect('/serverError')
    }
 }
+
+//remove product from cart
 const cartDel = async (req, res) => {
    try {
       const user = await User.findById(req.session.user._id)
@@ -472,6 +480,8 @@ const cartDel = async (req, res) => {
    }
 }
 
+
+//update cart quantity
 const upCart = async (req, res) => {
    try {
       const user = await User.findById(req.session.user._id)
@@ -491,7 +501,7 @@ const upCart = async (req, res) => {
 
 //WISHLIST
 
-
+//load wishlist page
 const loadWish = async (req, res) => {
    try {
       const user = await User.findById(req.session.user._id)
@@ -506,6 +516,8 @@ const loadWish = async (req, res) => {
       res.status(500).redirect('/serverError')
    }
 }
+
+//add product to wish list
 const addWish = async (req, res) => {
    try {
       const user = await User.findById(req.session.user._id)
@@ -522,6 +534,8 @@ const addWish = async (req, res) => {
    }
 }
 
+
+//delete from wish list
 const delWish = async (req, res) => {
    try {
       const user = await User.findById(req.session.user._id)
@@ -538,7 +552,8 @@ const delWish = async (req, res) => {
 
    }
 }
-// userprofile
+
+// user profile page loading
 const profileLoad = async (req, res) => {
    try {
       const user = await User.findById(req.session.user._id)
@@ -554,6 +569,7 @@ const profileLoad = async (req, res) => {
    }
 }
 
+//add user address
 const addAddress = async (req, res) => {
    try {
       const user = await User.findById(req.session.user._id)
@@ -582,7 +598,7 @@ const addAddress = async (req, res) => {
    }
 }
 
-
+//save address
 const saveAddr = async (req, res) => {
    try {
       const user = await User.findById(req.session.user._id)
@@ -603,7 +619,7 @@ const saveAddr = async (req, res) => {
    }
 }
 
-
+//delete address
 const delAdddress = async (req, res) => {
    try {
       console.log(req.body.i)
@@ -617,11 +633,13 @@ const delAdddress = async (req, res) => {
       res.status(500).redirect('/serverError')
    }
 }
+
+//edit address
 const editAdddress = async (req, res) => {
    res.redirect(`/profile?tab=address&addr=edit&i=${req.query.i}`);
 };
 
-
+//update basic information of the user
 const upbasic = async (req, res) => {
    try {
       const user = await User.findById(req.session.user._id);
@@ -653,7 +671,7 @@ const upbasic = async (req, res) => {
    }
 }
 //checkout
-
+//load checkout page
 const checkoutLoad = async (req, res) => {
    try {
       let coupons = null
@@ -691,9 +709,13 @@ const checkoutLoad = async (req, res) => {
       res.status(500).redirect('/serverError')
    }
 }
+
+//helper
 function arraysEqual(arr1, arr2) {
    return JSON.stringify(arr1) === JSON.stringify(arr2);
 }
+
+//place order
 const placeorder = async (req, res) => {
    try {
 
@@ -753,6 +775,8 @@ const placeorder = async (req, res) => {
       res.status(500).redirect('/serverError')
    }
 }
+
+//order success page
 const orderDone = async (req, res) => {
    try {
       if (req.query.id) {
@@ -769,6 +793,8 @@ const orderDone = async (req, res) => {
       res.status(500).redirect('/serverError')
    }
 };
+
+//razorpay payment verification
 const verifypayment = async (req, res) => {
    try {
       console.log(req.body)
@@ -781,6 +807,8 @@ const verifypayment = async (req, res) => {
       res.status(500).redirect('/serverError')
    }
 }
+
+//order listing in user profile
 const orderview = async (req, res) => {
    try {
       const user = await User.findById(req.session.user._id);
@@ -799,6 +827,7 @@ const orderview = async (req, res) => {
    }
 };
 
+//payment failure scenario handled
 const payFail = async (req, res) => {
    try {
       failHandler()
@@ -808,6 +837,8 @@ const payFail = async (req, res) => {
       res.status(500).redirect('/serverError')
    }
 }
+
+//payment failure helper
 async function failHandler() {
    const order = await Order.findOne({ paymentStatus: "Pending", paymentMethod: "online", orderStatus: "Pending" })
    if (order) {
@@ -822,6 +853,7 @@ async function failHandler() {
    }
 }
 
+//cancel the order
 const orderCancel = async (req, res) => {
    try {
       console.log(req.query.id)
@@ -846,7 +878,7 @@ const orderCancel = async (req, res) => {
       res.status(500).redirect('/serverError')
    }
 }
-
+//request return of the product
 const orderReturn = async (req, res) => {
    console.log(req.body);
    const order = await Order.findById(req.body.id)
@@ -857,6 +889,7 @@ const orderReturn = async (req, res) => {
    res.json({ status: true })
 }
 
+//invoice generation
 const orderInvoice = async (req, res) => {
    const orderId = req.query.id;
    const order = await Order.findById(req.query.id).populate('products.product');
